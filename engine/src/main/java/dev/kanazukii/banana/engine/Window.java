@@ -99,17 +99,18 @@ public class Window {
         switch (index) {
             case 0:
                 scene = new LevelEditorScene();
-                scene.init();
                 break;
             case 1:
                 scene = new LevelScene();
-                scene.init();
                 break;
         
             default:
                 assert false : "Unknown Scene " + index;
-                break; 
+                return;
         }
+
+        scene.init();
+        scene.start();
     }
 
     // Initialize and Create a GLFW window

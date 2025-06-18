@@ -38,18 +38,24 @@ import java.nio.IntBuffer;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
+import dev.kanazukii.banana.engine.components.SpriteRenderer;
 import dev.kanazukii.banana.engine.renderer.Shader;
+import dev.kanazukii.banana.engine.utils.Time;
 
 public class LevelEditorScene extends Scene {
 
     private Shader defaultShader;
+    private Texture test_texture;
+    private GameObject testObj;
+
+    boolean firstTime = false;
 
     private float[] vertexArr = {
-        // Position             //Color
-        150f, 50f, 0.0f,      1.0f, 0.0f, 0.0f, 1.0f, // 0
-        50f, 150f, 0.0f,      1.0f, 1.0f, 0.1f, 1.0f,  // 3
-        150f, 150f, 0.0f,       0.0f, 1.0f, 0.0f, 1.0f, // 1
-        50f, 50f, 0.0f,     0.0f, 0.0f, 1.0f, 1.0f // 2
+        // Position             //Color                 //UV Coordinates for Texture
+        150f, 50f, 0.0f,      1.0f, 1.0f, 1.0f, 1.0f,   1,1,// 0
+        50f, 150f, 0.0f,      1.0f, 1.0f, 1.0f, 1.0f,   0,0,// 1
+        150f, 150f, 0.0f,       1.0f, 1.0f, 1.0f, 1.0f, 1,0,// 2
+        50f, 50f, 0.0f,     1.0f, 1.0f, 1.0f, 1.0f ,    0,1// 3
     
     };
 
@@ -70,10 +76,15 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
+        testObj = new GameObject("Test Obj");
+        testObj.addComponent(new SpriteRenderer());
+        addGameObject(testObj);
+
         camera = new Camera(new Vector2f());
         //Shaders
         defaultShader = new Shader("shaders/default.glsl");
         defaultShader.compile();
+        test_texture = new Texture("assets/Hero_down2.png");
 
         // Generate A VAO, VBO, EBO buffer objects and send to GPU
         vaoID = glGenVertexArrays();
@@ -100,13 +111,16 @@ public class LevelEditorScene extends Scene {
         // Add the vertex attribute pointers
         int positionSize = 3;
         int colorSize = 4;
-        int floatSizeBytes = 4;
-        int vertexSizeBytes = (positionSize + colorSize) * floatSizeBytes;
+        int uvSize = 2;
+        int vertexSizeBytes = (positionSize + colorSize + uvSize) * Float.BYTES;
         glVertexAttribPointer(0, positionSize, GL_FLOAT, false, vertexSizeBytes, 0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionSize * floatSizeBytes);
+        glVertexAttribPointer(1, colorSize, GL_FLOAT, false, vertexSizeBytes, positionSize * Float.BYTES);
         glEnableVertexAttribArray(1);
+
+        glVertexAttribPointer(2, uvSize, GL_FLOAT, false, vertexSizeBytes, (positionSize + colorSize) * Float.BYTES);
+        glEnableVertexAttribArray(2);
     }
 
     @Override
@@ -115,8 +129,15 @@ public class LevelEditorScene extends Scene {
 
         // Bind shader program
         defaultShader.use();
+
+        //Upload Texture
+        defaultShader.uploadTexture("TEX_SAMPLER", 0);
+        glActiveTexture(GL_TEXTURE0);
+        test_texture.bind();
+
         defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
         defaultShader.uploadMat4f("uView", camera.getViewMatrix());
+        defaultShader.uploadFloat("uTime", Time.getDeltaTime());
         //Bind the VAO
         glBindVertexArray(vaoID);
         //Enable the vertex Attribute
@@ -130,6 +151,10 @@ public class LevelEditorScene extends Scene {
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
         defaultShader.detach();
+
+        for (GameObject gameObject: gameObjects){
+            gameObject.update(deltaTime);
+        }
     }
 
     
