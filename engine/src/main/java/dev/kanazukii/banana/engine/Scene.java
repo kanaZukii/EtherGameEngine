@@ -3,8 +3,11 @@ package dev.kanazukii.banana.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.kanazukii.banana.engine.renderer.Renderer;
+
 public abstract class Scene {
     
+    protected Renderer renderer = new Renderer();
     protected Camera camera;
     private boolean running = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
@@ -24,6 +27,7 @@ public abstract class Scene {
     public void start(){
         for (GameObject gameObject : gameObjects) {
             gameObject.start();
+            renderer.add(gameObject);
         }
 
         running = true;
@@ -35,7 +39,12 @@ public abstract class Scene {
         } else {
             gameObjects.add(gameObject);
             gameObject.start();
+            renderer.add(gameObject);
         }
+    }
+
+    public Camera getCamera(){
+        return camera;
     }
 
     public abstract void update(float deltaTime);

@@ -7,10 +7,17 @@ public class GameObject {
     
     private String name;
     private List<Component> components;
+    public Transform transform = new Transform();
 
     public GameObject(String name){
         this.name = name;
         this.components = new ArrayList<>();
+    }
+
+    public GameObject(String name, Transform transform){
+        this.name = name;
+        this.components = new ArrayList<>();
+        this.transform = transform;
     }
 
     public String getName(){

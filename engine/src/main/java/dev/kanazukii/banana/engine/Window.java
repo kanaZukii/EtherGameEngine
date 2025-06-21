@@ -78,6 +78,10 @@ public class Window {
         return window;
     }
 
+    public static Scene getScene(){
+        return scene;
+    }
+
     // Create and start showing a window
     public void run()
     {
