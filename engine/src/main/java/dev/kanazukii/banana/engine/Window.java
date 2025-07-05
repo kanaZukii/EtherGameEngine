@@ -2,7 +2,6 @@ package dev.kanazukii.banana.engine;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_5;
 import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -39,6 +38,7 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import dev.kanazukii.banana.engine.utils.AssetPool;
 import dev.kanazukii.banana.engine.utils.Time;
 
 public class Window {
@@ -87,7 +87,6 @@ public class Window {
     {
         System.out.println("What's up, Gamers");
         System.out.println("LWGL ver " + Version.getVersion());
-
         init();
         loop();
 

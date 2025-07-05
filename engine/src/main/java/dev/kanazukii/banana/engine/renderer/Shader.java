@@ -15,9 +15,7 @@ import static org.lwjgl.opengl.GL20.glUniform1f;
 import static org.lwjgl.opengl.GL20.glUniform1i;
 import static org.lwjgl.opengl.GL20.glUniform2f;
 import static org.lwjgl.opengl.GL20.glUniform3f;
-import static org.lwjgl.opengl.GL20.glUniform3fv;
 import static org.lwjgl.opengl.GL20.glUniform4f;
-import static org.lwjgl.opengl.GL20.glUniform4fv;
 import static org.lwjgl.opengl.GL20.glUniformMatrix3fv;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
@@ -54,16 +52,12 @@ public class Shader {
     private boolean inUse = false;
 
     public Shader(String filepath){
+
         this.filepath = filepath;
 
         try {
-            //String source = new String(Files.readAllBytes(Paths.get(filepath)));  // Absolute file
-            InputStream is = getClass().getClassLoader().getResourceAsStream(filepath);
-            if (is == null) {
-                throw new IOException("Shader file not found in resources: " + filepath);
-            }
+            String source = new String(Files.readAllBytes(Paths.get(filepath)));  // Absolute file
 
-            String source =  new String(is.readAllBytes());
             String[] splitString = source.split("(#type)( )+([a-zA-Z]+)");
 
             int index = source.indexOf("#type") + 6;
@@ -101,8 +95,20 @@ public class Shader {
 
     }
 
+    private String loadSourceFromMemory(String filepath) throws IOException {
+        InputStream is = getClass().getClassLoader().getResourceAsStream(filepath); // From resource folder (Bundled to memory)
+            if (is == null) {
+                throw new IOException("Shader file not found in resources: " + filepath);
+            }
+
+        String source =  new String(is.readAllBytes());
+
+        return source;
+    }
+
 
     public void compile(){
+        System.out.println( "Creating a shader");
         //Compile Shaders
         int vertexID, fragmentID;
         vertexID = glCreateShader(GL_VERTEX_SHADER);

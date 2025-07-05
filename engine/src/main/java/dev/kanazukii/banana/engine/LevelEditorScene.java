@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import dev.kanazukii.banana.engine.components.SpriteRenderer;
+import dev.kanazukii.banana.engine.utils.AssetPool;
 
 public class LevelEditorScene extends Scene {
 
@@ -36,6 +37,11 @@ public class LevelEditorScene extends Scene {
             }
         }
 
+        loadAssets();
+    }
+
+    private void loadAssets(){
+        AssetPool.getShader("assets/shaders/default.glsl");
     }
 
     @Override

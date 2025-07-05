@@ -16,13 +16,13 @@ import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenFramebuffers;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import org.joml.Vector4f;
 
 import dev.kanazukii.banana.engine.Window;
 import dev.kanazukii.banana.engine.components.SpriteRenderer;
+import dev.kanazukii.banana.engine.utils.AssetPool;
 
 public class RenderBatch {
     /* Vertex
@@ -49,8 +49,8 @@ public class RenderBatch {
     private Shader shader;
 
     public RenderBatch(int maxBatchSize){
-        shader = new Shader("shaders/default.glsl");
-        shader.compile();
+        System.out.println("Creating a Render Batch");
+        shader = AssetPool.getShader("assets/shaders/default.glsl");
         sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
 

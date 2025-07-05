@@ -38,7 +38,6 @@ public class Renderer {
             newBatch.start();
             batches.add(newBatch);
             newBatch.addSprite(sprite);
-            System.out.println("Created a new Batch!");
         }
     }
 

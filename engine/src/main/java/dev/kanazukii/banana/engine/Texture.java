@@ -12,20 +12,16 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexImage1D;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load;
 import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
+import static org.lwjgl.stb.STBImage.stbi_load;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-
-import javax.management.RuntimeErrorException;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBImage;
@@ -39,51 +35,46 @@ public class Texture {
     public Texture(String filepath){
         this.filepath = filepath;
 
-        try {
+        // Generate Texture on GPU
+        textureID = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, textureID);
 
-            // Generate Texture on GPU
-            textureID = glGenTextures();
-            glBindTexture(GL_TEXTURE_2D, textureID);
+        // Set Texture parameters
+        // Repeat Image in both directions
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Wrap X
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Wrap Y
 
-            // Set Texture parameters
-            // Repeat Image in both directions
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Wrap X
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Wrap Y
+        // When stretching, pixelate the texture
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        // When shrinking, pixelate the texture
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-            // When stretching, pixelate the texture
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            // When shrinking, pixelate the texture
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
+        IntBuffer channels = BufferUtils.createIntBuffer(1);
 
-            IntBuffer width = BufferUtils.createIntBuffer(1);
-            IntBuffer height = BufferUtils.createIntBuffer(1);
-            IntBuffer channels = BufferUtils.createIntBuffer(1);
+        ByteBuffer image = stbi_load(filepath, width, height, channels, 0);
+        //ByteBuffer image = loadImageFromMemory(filepath, width, height, channels, 0);
 
-            //ByteBuffer image = stbi_load(filepath, width, height, channels, 0);
-            ByteBuffer image = loadImageFromMemory(filepath, width, height, channels, 0);
-
-            if(image != null){
-                if(channels.get(0) == 3){
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0), 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-                }else if(channels.get(0) == 4){
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-                } else{
-                    assert false : "Error in Texture loading: Unknown numbers of channels: " + channels.get(0);
-                }
-                
-            } else {
-                assert false : "Error: Texture Could not load Image" + filepath + ""; 
+        if(image != null){
+            if(channels.get(0) == 3){
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0), 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+            }else if(channels.get(0) == 4){
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+            } else{
+                assert false : "Error in Texture loading: Unknown numbers of channels: " + channels.get(0);
             }
-
-            stbi_image_free(image);
-
-        } catch (IOException e) {
-            System.err.println("Unable to load Texture");
-            e.printStackTrace();
+            
+            System.out.println("Texture loaded");
+        } else {
+            assert false : "Error: Texture Could not load Image" + filepath + ""; 
         }
+
+        stbi_image_free(image);
     }
 
-    private ByteBuffer loadImageFromMemory(String filepath, IntBuffer width, IntBuffer height, IntBuffer channels, int desiredChannels) throws IOException{
+    // From resource folder (Bundled to memory)
+    private ByteBuffer loadImageFromMemory(String filepath, IntBuffer width, IntBuffer height, IntBuffer channels, int desiredChannels) {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream(filepath)){
             if(in == null) throw new RuntimeException("Texture Resource not found");
 
@@ -101,6 +92,10 @@ public class Texture {
             }
             MemoryUtil.memFree(imageBuffer);
             return image;
+        } catch (IOException e) {
+            System.err.println("Unable to load Texture");
+            e.printStackTrace();
+            return null;
         }
     }
 
