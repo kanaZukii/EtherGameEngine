@@ -9,6 +9,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
 import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
@@ -39,7 +40,6 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
 import dev.kanazukii.banana.engine.utils.AssetPool;
-import dev.kanazukii.banana.engine.utils.Time;
 
 public class Window {
     
@@ -171,8 +171,8 @@ public class Window {
     // Window Update and Draw Loop
     public void loop()
     {
-        float startTime = Time.getDeltaTime();
-        float endTime = Time.getDeltaTime();
+        float startTime = (float)glfwGetTime();
+        float endTime = (float)glfwGetTime();
         float deltaTime = -1.0f;
 
         while(!glfwWindowShouldClose(glfwWindow))
@@ -191,7 +191,7 @@ public class Window {
             
             glfwSwapBuffers(glfwWindow);
 
-            endTime = Time.getDeltaTime();
+            endTime = (float)glfwGetTime();
             deltaTime = endTime - startTime;
             startTime = endTime;
         }
