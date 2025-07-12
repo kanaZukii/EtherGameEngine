@@ -29,6 +29,8 @@ public class LevelEditorScene extends Scene {
         sorceress.addComponent(new SpriteRenderer(AssetPool.getTexture("assets/textures/Sorceress.png")));
         addGameObject(sorceress);
 
+        System.out.println("Game Objects in Scene: " + gameObjects.size());
+
         loadAssets();
     }
 

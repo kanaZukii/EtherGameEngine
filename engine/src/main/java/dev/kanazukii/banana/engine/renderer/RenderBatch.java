@@ -57,6 +57,7 @@ public class RenderBatch {
     private float[] vertices;
 
     private List<Texture> textures = new ArrayList<>();
+    private int texSize = 8;
     private int[] texSlots = {0,1,2,3,4,5,6,7};
 
     private int vaoID, vboID;
@@ -115,6 +116,14 @@ public class RenderBatch {
 
     public boolean hasRoom(){
         return !spriteFull;
+    }
+
+    public boolean hasRoomForTexture(){
+        return textures.size() < texSize;
+    }
+
+    public boolean hasTexture(Texture tex){
+        return textures.contains(tex);
     }
 
     private void loadElementIndices(int[] elements, int index){

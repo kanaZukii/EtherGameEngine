@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.kanazukii.banana.engine.GameObject;
+import dev.kanazukii.banana.engine.Texture;
 import dev.kanazukii.banana.engine.components.SpriteRenderer;
 
 public class Renderer {
@@ -27,9 +28,12 @@ public class Renderer {
         boolean added = false;
         for(RenderBatch batch: batches){
             if(batch.hasRoom()){
-                batch.addSprite(sprite);
-                added = true;
-                break;
+                Texture tex = sprite.getTexture();
+                if(tex == null  || batch.hasTexture(tex) || batch.hasRoomForTexture()){
+                    batch.addSprite(sprite);
+                    added = true;
+                    break;
+                }
             }
         }
 
