@@ -13,6 +13,7 @@ import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 import static org.lwjgl.opengl.GL20.glUniform1f;
 import static org.lwjgl.opengl.GL20.glUniform1i;
+import static org.lwjgl.opengl.GL20.glUniform1iv;
 import static org.lwjgl.opengl.GL20.glUniform2f;
 import static org.lwjgl.opengl.GL20.glUniform3f;
 import static org.lwjgl.opengl.GL20.glUniform4f;
@@ -226,6 +227,12 @@ public class Shader {
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
         glUniform1i(varLocation, value);
+    }
+    
+    public void uploadIntArray(String varname, int[] array){
+        int varLocation = glGetUniformLocation(shaderProgramID, varname);
+        use(); // Make sure it is in use when uploading to shader
+        glUniform1iv(varLocation, array);
     }
 
     public void uploadTexture(String varname, int slot){
