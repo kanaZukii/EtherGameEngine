@@ -9,12 +9,15 @@ import java.util.Map;
 import java.util.Set;
 
 import dev.kanazukii.banana.engine.Texture;
+import dev.kanazukii.banana.engine.components.Sprite;
+import dev.kanazukii.banana.engine.components.Spritesheet;
 import dev.kanazukii.banana.engine.renderer.Shader;
 
 public class AssetPool {
     
-    public static Map<String, Shader> shaders = new HashMap<>();
-    public static Map<String, Texture> textures = new HashMap<>();
+    private static Map<String, Shader> shaders = new HashMap<>();
+    private static Map<String, Texture> textures = new HashMap<>();
+    private static Map<String, Spritesheet> spritesheets = new HashMap<>();
 
     //Loads resource from classpath (used when inside JAR or src/main/resources)
     public static InputStream getFileFromMemory(String resourcePath) {
@@ -74,6 +77,24 @@ public class AssetPool {
             textures.put(filepath, texture);
             return texture;
         }
+    }
+
+    public static void addSpriteSheet(String filepath, Spritesheet spritesheet){
+        File file = new File(filepath);
+        String absolutePath = file.getAbsolutePath();
+        if(!spritesheets.containsKey(absolutePath)){
+            spritesheets.put(absolutePath, spritesheet);
+        }
+    }
+
+    public static Spritesheet getSpriteSheet(String filepath){
+        File file = new File(filepath);
+        String absolutePath = file.getAbsolutePath();
+        if(!spritesheets.containsKey(absolutePath)){
+            assert false: "Error: Resource: '" + filepath + "' this sprite sheet has not been added yet.";
+        }
+
+        return spritesheets.getOrDefault(absolutePath, null); // TODO: Create reate a missing texture sprite 
     }
 
 }
