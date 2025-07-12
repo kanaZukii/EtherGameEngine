@@ -32,6 +32,7 @@ public class Texture {
     
     private String filepath;
     private int textureID;
+    private int width, height;
 
     public Texture(String filepath){
         this.filepath = filepath;
@@ -65,6 +66,9 @@ public class Texture {
             } else{
                 assert false : "Error in Texture loading: Unknown numbers of channels: " + channels.get(0);
             }
+
+            this.width = width.get(0);
+            this.height = height.get(0);
             
             System.out.println("Texture loaded");
         } else {
@@ -98,6 +102,14 @@ public class Texture {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
     }
 
     public void bind(){
