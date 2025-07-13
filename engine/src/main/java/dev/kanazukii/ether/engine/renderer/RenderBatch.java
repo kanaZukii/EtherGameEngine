@@ -31,7 +31,7 @@ import dev.kanazukii.ether.engine.Window;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 
-public class RenderBatch {
+public class RenderBatch implements Comparable<RenderBatch> {
     /* Vertex  Layout of the vertex data that is being sent to the gpu to draw
      *  --------------
      *  Position        Color                        Tex Coords     Tex ID
@@ -69,13 +69,15 @@ public class RenderBatch {
     private int vaoID, vboID; // Vertex Array Object & Vertex Buffer Object
     private int maxBatchSize;   // Maximum Object that it can render per draw call
     private Shader shader;      // Shader program to be used (glsl)
+    private int zIndex;     // Z index for blending
 
-    public RenderBatch(int maxBatchSize){
+    public RenderBatch(int maxBatchSize, int zIndex) {
         System.out.println("Creating a Render Batch");
 
         shader = AssetPool.getShader("assets/shaders/default.glsl");
         sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
+        this.zIndex = zIndex;
 
         // Vertices Quads (Square)
         vertices = new float[maxBatchSize * 4 * VERTEX_SIZE];
@@ -119,6 +121,10 @@ public class RenderBatch {
         }
 
         return elements;
+    }
+
+    public int zIndex(){
+        return zIndex;
     }
 
     public boolean hasRoom(){
@@ -238,6 +244,7 @@ public class RenderBatch {
                 loadVertexProperties(i);
                 sprite.setClean();
                 rebufferData = true;
+                //System.out.println("Updated: " + i);
             }
         }
         // Rebuffer data for the frame if a sprite is dirty (modified)
@@ -273,6 +280,11 @@ public class RenderBatch {
             }
 
         shader.detach();
+    }
+
+    @Override
+    public int compareTo(RenderBatch arg0) {
+        return Integer.compare(this.zIndex, arg0.zIndex);
     }
 
 }

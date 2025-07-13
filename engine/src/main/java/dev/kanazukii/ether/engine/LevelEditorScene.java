@@ -26,11 +26,11 @@ public class LevelEditorScene extends Scene {
 
         test_sheet = AssetPool.getSpriteSheet("assets/textures/skeleton_spritesheet.png");
 
-        GameObject testSquare = new GameObject("Square", new Transform(new Vector2f(100, 100), new Vector2f(250, 250)));
+        GameObject testSquare = new GameObject("Square", new Transform(new Vector2f(100, 100), new Vector2f(250, 250)),0);
         testSquare.addComponent(new SpriteRenderer(new Vector4f(0,0, 0,1)));
         addGameObject(testSquare);
 
-        skeleton = new GameObject("Skeleton", new Transform(new Vector2f(350, 100), new Vector2f(250, 250)));
+        skeleton = new GameObject("Skeleton", new Transform(new Vector2f(350, 100), new Vector2f(64, 64)), 1);
         skeleton.addComponent(new SpriteRenderer(test_sheet.getSprite(0)));
         addGameObject(skeleton);
 
@@ -51,7 +51,7 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void update(float deltaTime) {
-        System.out.println("FPs: " + String.valueOf(Window.FPS));
+        System.out.println("FPS: " + String.valueOf(Window.FPS));
         for (GameObject gameObject: gameObjects){
             gameObject.update(deltaTime);
         }

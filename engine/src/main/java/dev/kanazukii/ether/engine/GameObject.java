@@ -6,19 +6,23 @@ import java.util.List;
 public class GameObject {
     
     private String name;
+    private int zIndex;
     // List of all components (Sprite render and etc.) of the object
     private List<Component> components;
-    public Transform transform = new Transform();
+    public Transform transform;
 
     // Constructor of a game object without the transform
     public GameObject(String name){
         this.name = name;
         this.components = new ArrayList<>();
+        this.transform = new Transform();
+        this.zIndex = 0;
     }
 
     // Constructor for game object with a transform (Scale and position)
-    public GameObject(String name, Transform transform){
+    public GameObject(String name, Transform transform, int zIndex){
         this.name = name;
+        this.zIndex = zIndex;
         this.components = new ArrayList<>();
         this.transform = transform;
     }
@@ -58,6 +62,10 @@ public class GameObject {
     public void addComponent (Component component){
         components.add(component);
         component.gameObject = this;
+    }
+
+    public int zIndex(){
+        return zIndex;
     }
 
     // Starts all the components
