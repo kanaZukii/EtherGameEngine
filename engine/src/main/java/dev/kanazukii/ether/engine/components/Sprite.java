@@ -1,8 +1,8 @@
-package dev.kanazukii.banana.engine.components;
+package dev.kanazukii.ether.engine.components;
 
 import org.joml.Vector2f;
 
-import dev.kanazukii.banana.engine.Texture;
+import dev.kanazukii.ether.engine.Texture;
 
 public class Sprite {
     

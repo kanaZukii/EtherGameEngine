@@ -1,4 +1,4 @@
-package dev.kanazukii.banana.engine;
+package dev.kanazukii.ether.engine;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;

@@ -1,6 +1,6 @@
-package dev.kanazukii.banana.engine.components;
+package dev.kanazukii.ether.engine.components;
 
-import dev.kanazukii.banana.engine.Component;
+import dev.kanazukii.ether.engine.Component;
 
 public class FontRenderer extends Component{
     

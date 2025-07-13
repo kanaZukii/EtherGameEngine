@@ -1,4 +1,4 @@
-package dev.kanazukii.banana.engine;
+package dev.kanazukii.ether.engine;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;

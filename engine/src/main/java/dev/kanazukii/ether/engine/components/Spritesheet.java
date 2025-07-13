@@ -1,11 +1,11 @@
-package dev.kanazukii.banana.engine.components;
+package dev.kanazukii.ether.engine.components;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.joml.Vector2f;
 
-import dev.kanazukii.banana.engine.Texture;
+import dev.kanazukii.ether.engine.Texture;
 
 public class Spritesheet {
     

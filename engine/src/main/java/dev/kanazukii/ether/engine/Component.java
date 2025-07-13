@@ -1,4 +1,4 @@
-package dev.kanazukii.banana.engine;
+package dev.kanazukii.ether.engine;
 
 public abstract class Component {
     

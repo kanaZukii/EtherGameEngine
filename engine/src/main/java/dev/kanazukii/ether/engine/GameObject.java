@@ -1,4 +1,4 @@
-package dev.kanazukii.banana.engine;
+package dev.kanazukii.ether.engine;
 
 import java.util.ArrayList;
 import java.util.List;

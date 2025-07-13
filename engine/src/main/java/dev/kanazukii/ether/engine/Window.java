@@ -1,4 +1,4 @@
-package dev.kanazukii.banana.engine;
+package dev.kanazukii.ether.engine;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
@@ -39,7 +39,7 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
-import dev.kanazukii.banana.engine.utils.AssetPool;
+import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class Window {
     

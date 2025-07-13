@@ -1,11 +1,11 @@
-package dev.kanazukii.banana.engine.renderer;
+package dev.kanazukii.ether.engine.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.kanazukii.banana.engine.GameObject;
-import dev.kanazukii.banana.engine.Texture;
-import dev.kanazukii.banana.engine.components.SpriteRenderer;
+import dev.kanazukii.ether.engine.GameObject;
+import dev.kanazukii.ether.engine.Texture;
+import dev.kanazukii.ether.engine.components.SpriteRenderer;
 
 public class Renderer {
     

@@ -1,9 +1,9 @@
-package dev.kanazukii.banana.engine;
+package dev.kanazukii.ether.engine;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.kanazukii.banana.engine.renderer.Renderer;
+import dev.kanazukii.ether.engine.renderer.Renderer;
 
 public abstract class Scene {
     
