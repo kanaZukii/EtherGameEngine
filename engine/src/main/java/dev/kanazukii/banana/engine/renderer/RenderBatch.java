@@ -220,9 +220,22 @@ public class RenderBatch {
     }
 
     public void render(){
-        // For now, we will rebuffer all data every frame
-        glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+
+        boolean rebufferData = false;
+        // Loop through sprites if something has changed
+        for(int i = 0; i < numSprite; i++){
+            SpriteRenderer sprite = sprites[i];
+            if(sprite.isDirty()){
+                loadVertexProperties(i);
+                sprite.setClean();
+                rebufferData = true;
+            }
+        }
+        // Rebuffer data for the frame if a sprite is dirty (modified)
+        if(rebufferData){
+            glBindBuffer(GL_ARRAY_BUFFER, vboID);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+        }
 
         // Use shader
         shader.use();
