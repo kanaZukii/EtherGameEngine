@@ -32,40 +32,47 @@ import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class RenderBatch {
-    /* Vertex
+    /* Vertex  Layout of the vertex data that is being sent to the gpu to draw
      *  --------------
      *  Position        Color                        Tex Coords     Tex ID
      *  float, float    float, float, float, float   float, float   float
      */
 
+    // Constants for specifying the length of the each component in the vertex data
     private final int POS_SIZE = 2;
     private final int COLOR_SIZE = 4;
     private final int TEX_COORDS_SIZE = 2;
     private final int TEX_ID_SIZE = 1;
 
+    // Constants for specifiying the offset (Where the string of component data begin) in float bytes
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
     private final int TEX_COORDS_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
     private final int TEX_ID_OFFSET = TEX_COORDS_OFFSET + TEX_COORDS_SIZE * Float.BYTES;
+
+    // Specify the length of a the data array within a singular vertex 
     private final int VERTEX_SIZE = 9;
     private final int VER_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
+    // list of sprites that is to be rendered
     private SpriteRenderer[] sprites;
     private int numSprite = 0;
     private boolean spriteFull = false;
 
     private float[] vertices;
 
+    // List of textures (A whole image / A Sprite sheet ) that a single render batch can draw '8' (index 0 is reserved for no texture)
     private List<Texture> textures = new ArrayList<>();
     private int texSize = 8;
     private int[] texSlots = {0,1,2,3,4,5,6,7};
 
-    private int vaoID, vboID;
-    private int maxBatchSize;
-    private Shader shader;
+    private int vaoID, vboID; // Vertex Array Object & Vertex Buffer Object
+    private int maxBatchSize;   // Maximum Object that it can render per draw call
+    private Shader shader;      // Shader program to be used (glsl)
 
     public RenderBatch(int maxBatchSize){
         System.out.println("Creating a Render Batch");
+
         shader = AssetPool.getShader("assets/shaders/default.glsl");
         sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
@@ -142,6 +149,7 @@ public class RenderBatch {
         elements[offsetArrIndex + 5] = offset + 1;
     }
 
+    // Loads vertex properties Positin, color, texture coords, texture
     private void loadVertexProperties(int index){
         SpriteRenderer sprite = sprites[index];
 
@@ -219,6 +227,7 @@ public class RenderBatch {
         }
     }
 
+    // Draw call
     public void render(){
 
         boolean rebufferData = false;
@@ -254,13 +263,14 @@ public class RenderBatch {
         glEnableVertexAttribArray(1);
         glDrawElements(GL_TRIANGLES, numSprite * 6, GL_UNSIGNED_INT, 0);
 
+        // Unbinding current attributes for the next draw call
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
         
-    for(int i = 0; i < textures.size(); i++){
-            textures.get(i).unBind();
-        }
+        for(int i = 0; i < textures.size(); i++){
+                textures.get(i).unBind();
+            }
 
         shader.detach();
     }

@@ -42,12 +42,14 @@ import org.lwjgl.BufferUtils;
 
 public class Shader {
 
+    // ID for indentifying the shader
     private int shaderProgramID;
 
+    // Code for vertex processing in string
     private String vertexSrc;
-
+    // Code for fragmentation processing in string
     private String fragmentSrc;
-
+    // Filepath for the glsl file
     private String filepath;
 
     private boolean inUse = false;
@@ -96,6 +98,7 @@ public class Shader {
 
     }
 
+    // Use this for loading in a compiled shader in memory
     private String loadSourceFromMemory(String filepath) throws IOException {
         InputStream is = getClass().getClassLoader().getResourceAsStream(filepath); // From resource folder (Bundled to memory)
             if (is == null) {
@@ -107,7 +110,7 @@ public class Shader {
         return source;
     }
 
-
+    // Compiles the shader from file
     public void compile(){
         System.out.println( "Creating a shader");
         //Compile Shaders
@@ -169,19 +172,21 @@ public class Shader {
 
     }
 
+     // Bind shader program
     public void use(){
-        // Bind shader program
         if(!inUse){
             glUseProgram(shaderProgramID);
             inUse = true;
         }
     }
 
+    // Unbind shader program
     public void detach(){
         glUseProgram(0);
         inUse = false;
     }
 
+    // Uploading 4x4 Float Matrix to a uniform variable in the shader program
     public void uploadMat4f(String varname, Matrix4f mat4){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
@@ -190,6 +195,7 @@ public class Shader {
         glUniformMatrix4fv(varLocation, false, matrixBuffer);
     }
 
+    // Uploading 3x3 Float Matrix to a uniform variable in the shader program
     public void uploadMat3f(String varname, Matrix3f mat3){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
@@ -199,42 +205,49 @@ public class Shader {
     }
     
 
+    // Uploading 2 Float Vector to a uniform variable in the shader program
     public void uploadVec2f(String varname, Vector2f vec2f){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
         glUniform2f(varLocation, vec2f.x, vec2f.y);
     }
 
+    // Uploading 3 Float Vector to a uniform variable in the shader program
     public void uploadVec3f(String varname, Vector3f vec3f){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
         glUniform3f(varLocation, vec3f.x, vec3f.y, vec3f.z);
     }
 
+    // Uploading 4 Float Vector to a uniform variable in the shader program
     public void uploadVec4f(String varname, Vector4f vec4f){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
         glUniform4f(varLocation, vec4f.x, vec4f.y, vec4f.z, vec4f.w);
     }
 
+    // Uploading a Float to a uniform variable in the shader program
     public void uploadFloat(String varname, float value){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
         glUniform1f(varLocation, value);
     }
 
+    // Uploading a Integer to a uniform variable in the shader program
     public void uploadInt(String varname, int value){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
         glUniform1i(varLocation, value);
     }
     
+    // Uploading an Integer Array to a uniform variable in the shader program
     public void uploadIntArray(String varname, int[] array){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use(); // Make sure it is in use when uploading to shader
         glUniform1iv(varLocation, array);
     }
 
+    // Uploading a Texture ID Index to a uniform variable in the shader program
     public void uploadTexture(String varname, int slot){
         int varLocation = glGetUniformLocation(shaderProgramID, varname);
         use();

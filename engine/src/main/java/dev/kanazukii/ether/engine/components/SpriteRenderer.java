@@ -9,17 +9,22 @@ import dev.kanazukii.ether.engine.Transform;
 
 public class SpriteRenderer extends Component{
     
+    // Color of the  object being drawn, defaults to white if has texture
     private Vector4f color;
+    // Sprite object that contains a sprite texture coordinates to sample from the texture (Spritesheet)
     private Sprite sprite;
 
+    // Used for checking modification in scale, position and sprite index
     private Transform lastTransform;
     private boolean isDirty = false;
 
+    // Construtor for a sprite renderer for a colored shape
     public SpriteRenderer(Vector4f color){
         this.color = color;
         this.sprite = new Sprite(null);
     }
 
+    // Construtor for a sprite renderer to render a sampled sprite from a spritesheet
     public SpriteRenderer(Sprite sprite){
         this.sprite = sprite;
         this.color = new Vector4f(1,1,1,1);
@@ -57,11 +62,13 @@ public class SpriteRenderer extends Component{
         }
     }
 
+    // Get the intital copy of the transform
     @Override
     public void start(){
         lastTransform = gameObject.transform.copy();
     }
 
+    // Check every update if the transform is modified
     @Override
     public void update(float deltaTime){
         if(!lastTransform.equals(gameObject.transform)){

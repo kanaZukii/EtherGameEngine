@@ -9,6 +9,7 @@ public class Sprite {
     private Texture texture;
     private Vector2f[] texCoords;
 
+    // A constructor for creating a sprite from an entire texture (Whole Image)
     public Sprite(Texture texture){
         this.texture = texture;
         Vector2f[] texCoords = {
@@ -21,6 +22,7 @@ public class Sprite {
         this.texCoords = texCoords;
     }
 
+    // Constructor for a singular sprite within a provided sprite sheet texture to sample from
     public Sprite(Texture texture, Vector2f[] texCoords){
         this.texture = texture;
         this.texCoords = texCoords;

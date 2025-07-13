@@ -6,7 +6,10 @@ import org.joml.Vector3f;
 
 public class Camera {
     
+    // To optimize projection to match the screen resolution
     private Matrix4f projectionMatrix, viewMatrix;
+
+    // Varibales in controlling the camera in 2d plane (The vector for the bottom left corner of the camera)
     private Vector2f position;
 
     public Camera(Vector2f position){
@@ -16,10 +19,12 @@ public class Camera {
         adjustProjection();
     }
 
+    // Getter of the position vector use this in moving the camera
     public Vector2f getPosition(){
         return position;
     }
 
+    // View matrix specifies where should the camera is looking (in 3D space)
     public Matrix4f getViewMatrix(){
         Vector3f cameraFront = new Vector3f(0.0f, 0.0f, -1.0f);
         Vector3f cameraUp = new Vector3f(0.0f, 1.0f, 0.0f);
@@ -35,6 +40,7 @@ public class Camera {
         return projectionMatrix;
     }
 
+    // Camera view area base on game tile size (in pixels) and the farthest z index
     public void adjustProjection(){
         float tileSize = 32.0f;
         float width = 40.0f;

@@ -9,6 +9,7 @@ import dev.kanazukii.ether.engine.components.SpriteRenderer;
 
 public class Renderer {
     
+    // Max render batch size and list of all batches of the renderer
     private final int MAX_BATCH_SIZE = 1000;
     private List<RenderBatch> batches;
 
@@ -16,6 +17,7 @@ public class Renderer {
         batches = new ArrayList<>();
     }
 
+    // Add a game object that has a sprite renderer component, components that do not required to be draw should be ignored
     public void add(GameObject gameObject){
         SpriteRenderer sprite = gameObject.getComponent(SpriteRenderer.class);
 
@@ -24,6 +26,7 @@ public class Renderer {
         }
     }
 
+    // Add a sprite to the renderer, creates a new batch if a batch limit has been reached or the texture limit has been reached
     private void addToRender(SpriteRenderer sprite){
         boolean added = false;
         for(RenderBatch batch: batches){
@@ -45,6 +48,7 @@ public class Renderer {
         }
     }
 
+    // Loops through each batch and call the draw function
     public void render(){
         for(RenderBatch batch: batches){
             batch.render();

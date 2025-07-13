@@ -15,6 +15,8 @@ import dev.kanazukii.ether.engine.renderer.Shader;
 
 public class AssetPool {
     
+    // Hashmaps that contains all the resources that the game will use Shaders, Textures, Spritesheet Object
+    // Absolute File location is used as key for indentifying the resource
     private static Map<String, Shader> shaders = new HashMap<>();
     private static Map<String, Texture> textures = new HashMap<>();
     private static Map<String, Spritesheet> spritesheets = new HashMap<>();
@@ -30,7 +32,7 @@ public class AssetPool {
         return in;
     }
 
-
+    // Retrieves and compiles a shader from disk
     public static Shader getShader(String filepath) {
         File file = new File(filepath);
         String absolutePath = file.getAbsolutePath();
@@ -45,6 +47,7 @@ public class AssetPool {
         }
     }
 
+    // Retrieves and compiles a shader that is compiled into memory
     public static Shader getShaderFromMemory(String filepath) {
         if (shaders.containsKey(filepath)) {
             return shaders.get(filepath);
@@ -56,6 +59,7 @@ public class AssetPool {
         }
     }
 
+    // Retrieves a texture from disk
     public static Texture getTexture(String filepath) {
         File file = new File(filepath);
         String absolutePath = file.getAbsolutePath();
@@ -69,6 +73,7 @@ public class AssetPool {
         }
     }
 
+    // Retrieves a texture that is compiled into memory
     public static Texture getTextureFromMemory(String filepath) {
         if (textures.containsKey(filepath)) {
             return textures.get(filepath);
@@ -79,6 +84,7 @@ public class AssetPool {
         }
     }
 
+    // Adds a created sprite sheet object with its texture's filepath as the key
     public static void addSpriteSheet(String filepath, Spritesheet spritesheet){
         File file = new File(filepath);
         String absolutePath = file.getAbsolutePath();
@@ -87,6 +93,7 @@ public class AssetPool {
         }
     }
 
+    // Checks if it holds the sprite sheet object and retrieves it
     public static Spritesheet getSpriteSheet(String filepath){
         File file = new File(filepath);
         String absolutePath = file.getAbsolutePath();

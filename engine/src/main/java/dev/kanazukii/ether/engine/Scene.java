@@ -24,6 +24,7 @@ public abstract class Scene {
         
     }
 
+    // Scene start method, add all game object to the renderer
     public void start(){
         for (GameObject gameObject : gameObjects) {
             gameObject.start();
@@ -33,6 +34,7 @@ public abstract class Scene {
         running = true;
     }
 
+    // Adds game objects to the scene and initialize them
     public void addGameObject(GameObject gameObject){
         if(!running){
             gameObjects.add(gameObject);
@@ -47,6 +49,7 @@ public abstract class Scene {
         return camera;
     }
 
+    // Scene update logic
     public abstract void update(float deltaTime);
 
 }
