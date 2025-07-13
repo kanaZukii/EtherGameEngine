@@ -18,6 +18,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowSizeCallback;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
@@ -61,6 +62,8 @@ public class Window {
     public static float FPS = 0.0f;
     public static int targetFPS = 0;
 
+    private ImGUILayer imGUILayer;
+
     private Window()
     {
         this.width = 1920;
@@ -83,8 +86,24 @@ public class Window {
         return window;
     }
 
+    public static int getWidth(){
+        return get().width;
+    }
+
+    public static int getHeight(){
+        return get().height;
+    }
+
     public static Scene getScene(){
         return scene;
+    }
+
+    public static void setHeight(int newHeight){
+        get().height = newHeight;
+    }
+
+    public static void setWidth(int newWidth){
+        get().width = newWidth;
     }
 
     // Create and start showing a window
@@ -148,6 +167,10 @@ public class Window {
 
         //Key Callbacks
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
+        glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) -> {
+            Window.setWidth(newWidth);
+            Window.setHeight(newHeight);
+        });
 
         // OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
@@ -167,6 +190,10 @@ public class Window {
         // For alpha blending and transparency
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+        // IMGUI
+        imGUILayer = new ImGUILayer(glfwWindow);
+        imGUILayer.initImGui();
 
         //GL Info
         System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
@@ -198,6 +225,7 @@ public class Window {
 
             FPS = (float)(1/deltaTime);
             
+            imGUILayer.update(deltaTime);
             glfwSwapBuffers(glfwWindow);
 
             endTime = (float)glfwGetTime();
