@@ -9,6 +9,7 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
+import imgui.ImFontGlyphRangesBuilder;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.callback.ImStrConsumer;
@@ -152,49 +153,49 @@ public class ImGUILayer {
             }
         });
 
+
         // // ------------------------------------------------------------
         // // Fonts configuration
-        // // Read: https://raw.githubusercontent.com/ocornut/imgui/master/docs/FONTS.txt
-
-        // final ImFontAtlas fontAtlas = io.getFonts();
-        // final ImFontConfig fontConfig = new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
-
-        // // Glyphs could be added per-font as well as per config used globally like here
-        // fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
-
-        // // Add a default font, which is 'ProggyClean.ttf, 13px'
-        // fontAtlas.addFontDefault();
-
-        // // Fonts merge example
-        // fontConfig.setMergeMode(true); // When enabled, all fonts added with this config would be merged with the previously added font
-        // fontConfig.setPixelSnapH(true);
-
-        // fontAtlas.addFontFromMemoryTTF(loadFromResources("basis33.ttf"), 16, fontConfig);
-
-        // fontConfig.setMergeMode(false);
-        // fontConfig.setPixelSnapH(false);
-
-        // // Fonts from file/memory example
-        // // We can add new fonts from the file system
-        // fontAtlas.addFontFromFileTTF("src/test/resources/Righteous-Regular.ttf", 14, fontConfig);
-        // fontAtlas.addFontFromFileTTF("src/test/resources/Righteous-Regular.ttf", 16, fontConfig);
-
-        // // Or directly from the memory
-        // fontConfig.setName("Roboto-Regular.ttf, 14px"); // This name will be displayed in Style Editor
-        // fontAtlas.addFontFromMemoryTTF(loadFromResources("Roboto-Regular.ttf"), 14, fontConfig);
-        // fontConfig.setName("Roboto-Regular.ttf, 16px"); // We can apply a new config value every time we add a new font
-        // fontAtlas.addFontFromMemoryTTF(loadFromResources("Roboto-Regular.ttf"), 16, fontConfig);
-
-        // fontConfig.destroy(); // After all fonts were added we don't need this config more
-
-        // // ------------------------------------------------------------
-        // // Use freetype instead of stb_truetype to build a fonts texture
-        // ImGuiFreeType.buildFontAtlas(fontAtlas, ImGuiFreeType.RasterizerFlags.LightHinting);
+        initFonts(io);
 
         // Method initializes LWJGL3 renderer.
         // This method SHOULD be called after you've initialized your ImGui configuration (fonts and so on).
         // ImGui context should be created as well.
         imGuiGl3.init(glslVersion);
+    }
+
+    private void initFonts(ImGuiIO io ){
+
+        final ImFontAtlas fontAtlas = io.getFonts();
+        final ImFontConfig fontConfig = new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
+
+        // Freetype rendering
+        fontAtlas.setFreeTypeRenderer(true);
+
+        // Font config for additional fonts (Use this once there is already a font added to the config)
+        // fontConfig.setMergeMode(true);  // Enable merge mode to merge cyrillic, japanese and icons with default font
+
+        // Here we are using it just to combine all required glyphs in one place
+        //final ImFontGlyphRangesBuilder rangesBuilder = new ImFontGlyphRangesBuilder(); // Glyphs ranges provide
+        //rangesBuilder.addRanges(fontAtlas.getGlyphRangesDefault());
+        //rangesBuilder.addRanges(fontAtlas.getGlyphRangesCyrillic());
+        //rangesBuilder.addRanges(fontAtlas.getGlyphRangesJapanese());
+
+        // Store it in a short array and pass it when adding fonts to the font atlas
+        //final short[] glyphRanges = rangesBuilder.buildRanges();
+        //fontAtlas.addFontFromMemoryTTF(loadFromResources("Tahoma.ttf"), 14, fontConfig, glyphRanges); // cyrillic glyphs
+        //fontAtlas.addFontFromMemoryTTF(loadFromResources("NotoSansCJKjp-Medium.otf"), 14, fontConfig, glyphRanges); // japanese glyphs
+
+        
+        // Or just set one glyph range in the fontconfig
+        fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesDefault());
+
+        fontAtlas.addFontFromFileTTF("assets/fonts/GenericMobileSystemNuevo.ttf", 20, fontConfig);
+
+        fontAtlas.build();
+
+        fontConfig.destroy(); // After all fonts were added we don't need this config more
+
     }
 
     public void update(float deltaTime){
