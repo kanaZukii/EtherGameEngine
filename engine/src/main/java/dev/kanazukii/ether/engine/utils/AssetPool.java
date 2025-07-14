@@ -40,7 +40,7 @@ public class AssetPool {
         if (shaders.containsKey(absolutePath)) {
             return shaders.get(absolutePath);
         } else {
-            Shader shader = new Shader(absolutePath);
+            Shader shader = new Shader(filepath);
             shader.compile();
             shaders.put(absolutePath, shader);
             return shader;
@@ -67,7 +67,8 @@ public class AssetPool {
         if (textures.containsKey(absolutePath)) {
             return textures.get(absolutePath);
         } else {
-            Texture texture = new Texture(absolutePath);
+            Texture texture = new Texture();
+            texture.init(filepath);
             textures.put(absolutePath, texture);
             return texture;
         }
@@ -78,7 +79,8 @@ public class AssetPool {
         if (textures.containsKey(filepath)) {
             return textures.get(filepath);
         } else {
-            Texture texture = new Texture(filepath);
+            Texture texture = new Texture();
+            texture.init(filepath);
             textures.put(filepath, texture);
             return texture;
         }

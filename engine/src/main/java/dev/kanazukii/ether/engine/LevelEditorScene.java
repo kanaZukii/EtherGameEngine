@@ -3,6 +3,10 @@ package dev.kanazukii.ether.engine;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.GsonBuildConfig;
+
 import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
@@ -28,16 +32,24 @@ public class LevelEditorScene extends Scene {
         test_sheet = AssetPool.getSpriteSheet("assets/textures/skeleton_spritesheet.png");
 
         GameObject testSquare = new GameObject("Square", new Transform(new Vector2f(100, 100), new Vector2f(250, 250)),0);
-        testSquare.addComponent(new SpriteRenderer(new Vector4f(0,0, 0,1)));
+        SpriteRenderer testSpriteRenderer = new SpriteRenderer();
+        testSpriteRenderer.setColor(new Vector4f(0,0,0,1));
+        testSquare.addComponent(testSpriteRenderer);
         addGameObject(testSquare);
 
+        SpriteRenderer skeletonSprite = new SpriteRenderer();
+        skeletonSprite.setSprite(test_sheet.getSprite(0));
         skeleton = new GameObject("Skeleton", new Transform(new Vector2f(350, 100), new Vector2f(64, 64)), 1);
-        skeleton.addComponent(new SpriteRenderer(test_sheet.getSprite(0)));
+        skeleton.addComponent(skeletonSprite);
         addGameObject(skeleton);
 
         this.activeGameObject = skeleton;
 
         System.out.println("Game Objects in Scene: " + gameObjects.size());
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        System.out.println(gson.toJson(skeleton));
     }
 
     private void loadAssets(){
@@ -55,6 +67,7 @@ public class LevelEditorScene extends Scene {
     @Override
     public void update(float deltaTime) {
         System.out.println("FPS: " + String.valueOf(Window.FPS));
+
         for (GameObject gameObject: gameObjects){
             gameObject.update(deltaTime);
         }

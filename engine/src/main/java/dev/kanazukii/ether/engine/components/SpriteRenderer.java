@@ -11,25 +11,29 @@ import imgui.ImGui;
 public class SpriteRenderer extends Component{
     
     // Color of the  object being drawn, defaults to white if has texture
-    private Vector4f color;
+    private Vector4f color = new Vector4f(1,1,1,1);
     // Sprite object that contains a sprite texture coordinates to sample from the texture (Spritesheet)
-    private Sprite sprite;
+    private Sprite sprite = new Sprite();
 
     // Used for checking modification in scale, position and sprite index
-    private Transform lastTransform;
-    private boolean isDirty = false;
+    private transient Transform lastTransform;
+    private transient boolean isDirty = false;
 
-    // Construtor for a sprite renderer for a colored shape
-    public SpriteRenderer(Vector4f color){
-        this.color = color;
-        this.sprite = new Sprite(null);
-        isDirty = true;
-    }
+    // // Construtor for a sprite renderer for a colored shape (Before gson)
+    // public SpriteRenderer(Vector4f color){
+    //     this.color = color;
+    //     this.sprite = new Sprite(null);
+    //     isDirty = true;
+    // }
 
-    // Construtor for a sprite renderer to render a sampled sprite from a spritesheet
-    public SpriteRenderer(Sprite sprite){
-        this.sprite = sprite;
-        this.color = new Vector4f(1,1,1,1);
+    // // Construtor for a sprite renderer to render a sampled sprite from a spritesheet
+    // public SpriteRenderer(Sprite sprite){
+    //     this.sprite = sprite;
+    //     this.color = new Vector4f(1,1,1,1);
+    //     isDirty = true;
+    // }
+
+    public SpriteRenderer(){
         isDirty = true;
     }
 
@@ -54,12 +58,12 @@ public class SpriteRenderer extends Component{
     }
 
     public void setSprite(Sprite sprite){
-        this.sprite =  sprite;
         isDirty = true;
+        this.sprite =  sprite;
     }
 
     public void setColor(Vector4f color){
-        if(!color.equals(color)){
+        if(!this.color.equals(color)){
             isDirty = true;
             this.color.set(color);
         }
