@@ -21,7 +21,7 @@ import imgui.flag.ImGuiMouseCursor;
 import imgui.gl3.ImGuiImplGl3;
 
 public class ImGUILayer {
-    
+
     private String glslVersion = "#version 330 core";
     private long glfwWindowPtr;
 
@@ -47,39 +47,26 @@ public class ImGUILayer {
         // Initialize ImGuiIO config
         final ImGuiIO io = ImGui.getIO();
 
-        io.setIniFilename(null); // We don't want to save .ini file
+        io.setIniFilename("imGui.ini"); // We don't want to save .ini file
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navigation with keyboard
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
 
         // ------------------------------------------------------------
-        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
-        final int[] keyMap = new int[ImGuiKey.COUNT];
-        keyMap[ImGuiKey.Tab] = GLFW_KEY_TAB;
-        keyMap[ImGuiKey.LeftArrow] = GLFW_KEY_LEFT;
-        keyMap[ImGuiKey.RightArrow] = GLFW_KEY_RIGHT;
-        keyMap[ImGuiKey.UpArrow] = GLFW_KEY_UP;
-        keyMap[ImGuiKey.DownArrow] = GLFW_KEY_DOWN;
-        keyMap[ImGuiKey.PageUp] = GLFW_KEY_PAGE_UP;
-        keyMap[ImGuiKey.PageDown] = GLFW_KEY_PAGE_DOWN;
-        keyMap[ImGuiKey.Home] = GLFW_KEY_HOME;
-        keyMap[ImGuiKey.End] = GLFW_KEY_END;
-        keyMap[ImGuiKey.Insert] = GLFW_KEY_INSERT;
-        keyMap[ImGuiKey.Delete] = GLFW_KEY_DELETE;
-        keyMap[ImGuiKey.Backspace] = GLFW_KEY_BACKSPACE;
-        keyMap[ImGuiKey.Space] = GLFW_KEY_SPACE;
-        keyMap[ImGuiKey.Enter] = GLFW_KEY_ENTER;
-        keyMap[ImGuiKey.Escape] = GLFW_KEY_ESCAPE;
-        keyMap[ImGuiKey.KeyPadEnter] = GLFW_KEY_KP_ENTER;
-        keyMap[ImGuiKey.A] = GLFW_KEY_A;
-        keyMap[ImGuiKey.C] = GLFW_KEY_C;
-        keyMap[ImGuiKey.V] = GLFW_KEY_V;
-        keyMap[ImGuiKey.X] = GLFW_KEY_X;
-        keyMap[ImGuiKey.Y] = GLFW_KEY_Y;
-        keyMap[ImGuiKey.Z] = GLFW_KEY_Z;
-        io.setKeyMap(keyMap);
-
+        // Mapping and Input callbacks
+        initInputs(io);
+        
         // ------------------------------------------------------------
+        // Fonts configuration
+        initFonts(io);
+
+        // Method initializes LWJGL3 renderer.
+        // This method SHOULD be called after you've initialized your ImGui configuration (fonts and so on).
+        // ImGui context should be created as well.
+        imGuiGl3.init(glslVersion);
+    }
+
+    private void initInputs(ImGuiIO io){
         // Mouse cursors mapping
         mouseCursors[ImGuiMouseCursor.Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
         mouseCursors[ImGuiMouseCursor.TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
@@ -95,16 +82,15 @@ public class ImGUILayer {
         // GLFW callbacks to handle user input
 
         glfwSetKeyCallback(glfwWindowPtr, (w, key, scancode, action, mods) -> {
-            if (action == GLFW_PRESS) {
-                io.addKeyEvent(key, true);
-            } else if (action == GLFW_RELEASE) {
-                io.addKeyEvent(key, false);
-            }
+            int imguiKey = mapGLFWKeyToImGuiKey(key);
+                if (imguiKey != -1) {
+                    io.addKeyEvent(imguiKey, action == GLFW_PRESS);
+                }
 
-            io.setKeyCtrl(io.getKeysDown(GLFW_KEY_LEFT_CONTROL) || io.getKeysDown(GLFW_KEY_RIGHT_CONTROL));
-            io.setKeyShift(io.getKeysDown(GLFW_KEY_LEFT_SHIFT) || io.getKeysDown(GLFW_KEY_RIGHT_SHIFT));
-            io.setKeyAlt(io.getKeysDown(GLFW_KEY_LEFT_ALT) || io.getKeysDown(GLFW_KEY_RIGHT_ALT));
-            io.setKeySuper(io.getKeysDown(GLFW_KEY_LEFT_SUPER) || io.getKeysDown(GLFW_KEY_RIGHT_SUPER));
+                io.setKeyCtrl((mods & GLFW_MOD_CONTROL) != 0);
+                io.setKeyShift((mods & GLFW_MOD_SHIFT) != 0);
+                io.setKeyAlt((mods & GLFW_MOD_ALT) != 0);
+                io.setKeySuper((mods & GLFW_MOD_SUPER) != 0);
         });
 
         glfwSetCharCallback(glfwWindowPtr, (w, c) -> {
@@ -152,16 +138,6 @@ public class ImGUILayer {
                 }
             }
         });
-
-
-        // // ------------------------------------------------------------
-        // // Fonts configuration
-        initFonts(io);
-
-        // Method initializes LWJGL3 renderer.
-        // This method SHOULD be called after you've initialized your ImGui configuration (fonts and so on).
-        // ImGui context should be created as well.
-        imGuiGl3.init(glslVersion);
     }
 
     private void initFonts(ImGuiIO io ){
@@ -198,12 +174,44 @@ public class ImGUILayer {
 
     }
 
-    public void update(float deltaTime){
+    private int mapGLFWKeyToImGuiKey(int glfwKey) {
+        switch (glfwKey) {
+            case GLFW_KEY_TAB: return ImGuiKey.Tab;
+            case GLFW_KEY_LEFT: return ImGuiKey.LeftArrow;
+            case GLFW_KEY_RIGHT: return ImGuiKey.RightArrow;
+            case GLFW_KEY_UP: return ImGuiKey.UpArrow;
+            case GLFW_KEY_DOWN: return ImGuiKey.DownArrow;
+            case GLFW_KEY_PAGE_UP: return ImGuiKey.PageUp;
+            case GLFW_KEY_PAGE_DOWN: return ImGuiKey.PageDown;
+            case GLFW_KEY_HOME: return ImGuiKey.Home;
+            case GLFW_KEY_END: return ImGuiKey.End;
+            case GLFW_KEY_INSERT: return ImGuiKey.Insert;
+            case GLFW_KEY_DELETE: return ImGuiKey.Delete;
+            case GLFW_KEY_BACKSPACE: return ImGuiKey.Backspace;
+            case GLFW_KEY_SPACE: return ImGuiKey.Space;
+            case GLFW_KEY_ENTER: return ImGuiKey.Enter;
+            case GLFW_KEY_ESCAPE: return ImGuiKey.Escape;
+            case GLFW_KEY_KP_ENTER: return ImGuiKey.KeypadEnter;
+            case GLFW_KEY_A: return ImGuiKey.A;
+            case GLFW_KEY_C: return ImGuiKey.C;
+            case GLFW_KEY_V: return ImGuiKey.V;
+            case GLFW_KEY_X: return ImGuiKey.X;
+            case GLFW_KEY_Y: return ImGuiKey.Y;
+            case GLFW_KEY_Z: return ImGuiKey.Z;
+            // add more as needed
+            default: return -1;
+        }
+    }
+
+
+    public void update(float deltaTime, Scene scene){
         startFrame(deltaTime);
 
         // Any Dear ImGui code SHOULD go between ImGui.newFrame()/ImGui.render() methods
         imGuiGl3.newFrame(); 
         ImGui.newFrame();
+
+        scene.ImGUI();
         ImGui.showDemoWindow();
         ImGui.render();
 

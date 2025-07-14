@@ -225,7 +225,7 @@ public class Window {
 
             FPS = (float)(1/deltaTime);
             
-            imGUILayer.update(deltaTime);
+            imGUILayer.update(deltaTime, scene);
             glfwSwapBuffers(glfwWindow);
 
             endTime = (float)glfwGetTime();

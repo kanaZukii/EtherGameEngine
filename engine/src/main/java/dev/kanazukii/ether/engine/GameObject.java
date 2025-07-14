@@ -68,6 +68,12 @@ public class GameObject {
         return zIndex;
     }
 
+    public void ImGUI(){
+        for (Component component : components) {
+            component.ImGUI();
+        }
+    }
+
     // Starts all the components
     public void start(){
         for(int i = 0; i < components.size(); i++){

@@ -10,6 +10,11 @@ public abstract class Component {
         
     }
 
+    // For ImGUI integration and manipulation
+    public void ImGUI(){
+
+    }
+
     // update method of the component (Should be overwritten in the child class)
     public void update(float deltaTime){
 

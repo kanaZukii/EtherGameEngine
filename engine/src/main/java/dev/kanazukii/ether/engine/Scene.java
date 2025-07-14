@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.kanazukii.ether.engine.renderer.Renderer;
+import imgui.ImGui;
 
 public abstract class Scene {
     
@@ -11,6 +12,7 @@ public abstract class Scene {
     protected Camera camera;
     private boolean running = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
+    protected GameObject activeGameObject = null;
 
     public Scene(){
         
@@ -47,6 +49,18 @@ public abstract class Scene {
 
     public Camera getCamera(){
         return camera;
+    }
+
+    public void sceneImGUI(){
+        if(activeGameObject != null){
+            ImGui.begin("Object Inspector");
+            activeGameObject.ImGUI();
+            ImGui.end();
+        }
+    }
+
+    public void ImGUI(){
+
     }
 
     // Scene update logic
