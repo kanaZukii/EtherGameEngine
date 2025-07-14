@@ -6,6 +6,7 @@ import org.joml.Vector4f;
 import dev.kanazukii.ether.engine.Component;
 import dev.kanazukii.ether.engine.Texture;
 import dev.kanazukii.ether.engine.Transform;
+import imgui.ImGui;
 
 public class SpriteRenderer extends Component{
     
@@ -77,5 +78,15 @@ public class SpriteRenderer extends Component{
             this.gameObject.transform.copyTo(lastTransform);
             isDirty = true;
         }
+    }
+
+    @Override
+    public void ImGUI(){
+        float[] colors = {this.color.x, this.color.y, this.color.z, this.color.w}; 
+        if(ImGui.colorPicker4("Color Picker", colors)){
+            this.color.set(colors[0], colors[1], colors[2], colors[3]);
+            isDirty = true;
+        };
+
     }
 }

@@ -7,6 +7,7 @@ import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
 import dev.kanazukii.ether.engine.utils.AssetPool;
+import imgui.ImGui;
 
 public class LevelEditorScene extends Scene {
 
@@ -33,6 +34,8 @@ public class LevelEditorScene extends Scene {
         skeleton = new GameObject("Skeleton", new Transform(new Vector2f(350, 100), new Vector2f(64, 64)), 1);
         skeleton.addComponent(new SpriteRenderer(test_sheet.getSprite(0)));
         addGameObject(skeleton);
+
+        this.activeGameObject = skeleton;
 
         System.out.println("Game Objects in Scene: " + gameObjects.size());
     }
@@ -71,5 +74,11 @@ public class LevelEditorScene extends Scene {
         renderer.render();
     }
 
+    @Override
+    public void ImGUI(){
+        ImGui.text("Hello World!");
+        ImGui.button("Click me!");
+        ImGui.end();
+    }
     
 }

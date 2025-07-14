@@ -35,9 +35,7 @@ public class ImGUILayer {
         this.glfwWindowPtr = glfwWindow;
     }
 
-     // TODO: Should change this to the updated method
-
-    // Initialize Dear ImGui. Deprecated (1.76-0.9)
+    // Initialize Dear ImGui.
     public void initImGui() {
         // IMPORTANT!!
         // This line is critical for Dear ImGui to work.
@@ -55,7 +53,7 @@ public class ImGUILayer {
         // ------------------------------------------------------------
         // Mapping and Input callbacks
         initInputs(io);
-        
+
         // ------------------------------------------------------------
         // Fonts configuration
         initFonts(io);
@@ -211,7 +209,7 @@ public class ImGUILayer {
         imGuiGl3.newFrame(); 
         ImGui.newFrame();
 
-        scene.ImGUI();
+        scene.sceneImGUI();
         ImGui.showDemoWindow();
         ImGui.render();
 
