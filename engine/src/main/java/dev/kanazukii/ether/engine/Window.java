@@ -136,6 +136,7 @@ public class Window {
                 return;
         }
 
+        scene.loadScene();
         scene.init();
         scene.start();
     }
@@ -200,7 +201,7 @@ public class Window {
         System.out.println("Renderer: " + glGetString(GL_RENDERER));
         System.out.println("Vendor: " + glGetString(GL_VENDOR));
         System.out.println("GLSL Version: " + glGetString(GL_SHADING_LANGUAGE_VERSION));
-
+        
         changeScene(0);
     }
 
@@ -210,7 +211,7 @@ public class Window {
         float startTime = (float)glfwGetTime();
         float endTime = (float)glfwGetTime();
         float deltaTime = -1.0f;
-
+        
         while(!glfwWindowShouldClose(glfwWindow))
         {
             //Poll Events for key listeners
@@ -232,6 +233,7 @@ public class Window {
             deltaTime = endTime - startTime;
             startTime = endTime;
         }
+        scene.saveAtExit();
     }
 
 }

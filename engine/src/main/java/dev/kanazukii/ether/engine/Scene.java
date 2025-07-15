@@ -1,7 +1,15 @@
 package dev.kanazukii.ether.engine;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import dev.kanazukii.ether.engine.renderer.Renderer;
 import imgui.ImGui;
@@ -13,6 +21,7 @@ public abstract class Scene {
     private boolean running = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
     protected GameObject activeGameObject = null;
+    protected boolean sceneLoaded = false;
 
     public Scene(){
         
@@ -61,6 +70,44 @@ public abstract class Scene {
 
     public void ImGUI(){
 
+    }
+
+    public void saveAtExit(){
+        Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .registerTypeAdapter(Component.class, new ComponentDeserializer())
+                        .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
+                        .create();
+        try {
+            FileWriter writer = new FileWriter("gamescene.txt");
+            writer.write(gson.toJson(this.gameObjects));
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadScene(){
+        Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .registerTypeAdapter(Component.class, new ComponentDeserializer())
+                        .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
+                        .create();
+        String savedScene = "";
+
+        try{
+            savedScene = new String(Files.readAllBytes(Paths.get("gamescene.txt")));
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        if(!savedScene.equals("")){
+            GameObject[] gameObjects = gson.fromJson(savedScene, GameObject[].class);
+            for(GameObject go: gameObjects){
+                addGameObject(go);
+            }
+            sceneLoaded = true;
+        }
     }
 
     // Scene update logic
