@@ -208,7 +208,7 @@ public class ImGUILayer {
         // Any Dear ImGui code SHOULD go between ImGui.newFrame()/ImGui.render() methods
         imGuiGl3.newFrame(); 
         ImGui.newFrame();
-
+        scene.ImGUI();
         scene.sceneImGUI();
         ImGui.showDemoWindow();
         ImGui.render();

@@ -13,6 +13,7 @@ import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 import imgui.ImGui;
+import imgui.ImVec2;
 
 public class LevelEditorScene extends Scene {
 
@@ -21,14 +22,15 @@ public class LevelEditorScene extends Scene {
     }
 
     private Spritesheet test_sheet;
-    
+    private Spritesheet tile_set;
+
     @Override
     public void init() {
 
         loadAssets();
 
         camera = new Camera(new Vector2f());
-
+        tile_set = AssetPool.getSpriteSheet("assets/textures/tilemap.png");
         test_sheet = AssetPool.getSpriteSheet("assets/textures/skeleton_spritesheet.png");
         
         if(sceneLoaded){
@@ -49,7 +51,6 @@ public class LevelEditorScene extends Scene {
         skeleton.addComponent(new RigidBody());
         addGameObject(skeleton);
 
-
         this.activeGameObject = gameObjects.get(1);
 
     }
@@ -58,9 +59,14 @@ public class LevelEditorScene extends Scene {
     private void loadAssets(){
         AssetPool.getShader("assets/shaders/default.glsl");
 
+        AssetPool.addSpriteSheet("assets/textures/tilemap.png", 
+                                new Spritesheet(AssetPool.getTexture("assets/textures/tilemap.png"), 
+                                    16, 16, 10, 0));
+
         AssetPool.addSpriteSheet("assets/textures/skeleton_spritesheet.png", 
                                 new Spritesheet(AssetPool.getTexture("assets/textures/skeleton_spritesheet.png"), 
-                                    16, 16, 32, 0));
+                                    16, 16, 8, 0));
+
     }
 
     private float tick = 0.1f;
@@ -69,7 +75,7 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void update(float deltaTime) {
-        System.out.println("FPS: " + String.valueOf(Window.FPS));
+        //System.out.println("FPS: " + String.valueOf(Window.FPS));
 
         for (GameObject gameObject: gameObjects){
             gameObject.update(deltaTime);
@@ -94,8 +100,43 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void ImGUI(){
-        ImGui.text("Hello World!");
-        ImGui.button("Click me!");
+        ImGui.begin("Tile Set");
+
+        ImVec2 windowPos = new ImVec2();
+        ImGui.getWindowPos(windowPos);
+
+        ImVec2 windowSize = new ImVec2();
+        ImGui.getWindowSize(windowSize);
+
+        ImVec2 itemSpacing = new ImVec2();
+        ImGui.getStyle().getItemSpacing(itemSpacing);
+
+        float windowX2 = windowPos.x + windowSize.x;
+        for(int i = 0; i < tile_set.getSize(); i++){
+            Sprite tile_icon = tile_set.getSprite(i);
+
+            float icon_width = tile_icon.getWidth() * 4;
+            float icon_height = tile_icon.getHeight() * 4;
+            int id = tile_icon.getTexture().getID();
+            Vector2f[] texCoords =  tile_icon.getTexCoords();
+
+            ImGui.pushID(i);
+            if(ImGui.imageButton(id, icon_width, icon_height, texCoords[0].x, texCoords[0].y, texCoords[2].x, texCoords[2].y)){
+                System.out.println("Clicked: " + i);
+            }
+            ImGui.popID();
+
+            ImVec2 lasButtonPos = new ImVec2();
+            ImGui.getItemRectMax(lasButtonPos);
+
+            float lastButtonX2 = lasButtonPos.x;
+            float nextButtonX2 = lastButtonX2 + itemSpacing.x + icon_width;
+
+            if(i + 1 < tile_set.getSize() && nextButtonX2 < windowX2){
+                ImGui.sameLine();
+            }
+        }
+
         ImGui.end();
     }
     

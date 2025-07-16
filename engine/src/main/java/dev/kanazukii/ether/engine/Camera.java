@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 public class Camera {
     
     // To optimize projection to match the screen resolution
-    private Matrix4f projectionMatrix, viewMatrix;
+    private Matrix4f projectionMatrix, viewMatrix, inverseProjection, inverseView;
 
     // Varibales in controlling the camera in 2d plane (The vector for the bottom left corner of the camera)
     private Vector2f position;
@@ -16,6 +16,8 @@ public class Camera {
         this.position = position;
         this.projectionMatrix = new Matrix4f();
         this.viewMatrix = new Matrix4f();
+        this.inverseProjection = new Matrix4f();
+        this.inverseView = new Matrix4f();
         adjustProjection();
     }
 
@@ -32,7 +34,7 @@ public class Camera {
         viewMatrix = viewMatrix.lookAt( new Vector3f(position.x, position.y, 20.0f),
                                         cameraFront.add(position.x, position.y, 0.0f),
                                         cameraUp );
-
+        viewMatrix.invert(inverseView);
         return viewMatrix;
     }
 
@@ -49,5 +51,15 @@ public class Camera {
 
         projectionMatrix.identity();
         projectionMatrix.ortho(0.0f, tileSize * width, 0.0f, tileSize * height, 0, farZ);
+        projectionMatrix.invert(inverseProjection);
     }
+
+    public Matrix4f getInverseProjection(){
+        return inverseProjection;
+    }
+
+    public Matrix4f getInverseView(){
+        return inverseView;
+    }
+
 }

@@ -116,6 +116,10 @@ public class Texture {
         return height;
     }
 
+    public int getID(){
+        return textureID;
+    }
+
     public String getFilePath(){
         return filepath;
     }

@@ -13,25 +13,9 @@ public class Sprite {
             new Vector2f(0,0),
             new Vector2f(0,1)
         };
-
-    // // A constructor for creating a sprite from an entire texture (Whole Image) (Before Gson)
-    // public Sprite(Texture texture){
-    //     this.texture = texture;
-    //     Vector2f[] texCoords = {
-    //         new Vector2f(1,1),
-    //         new Vector2f(1,0),
-    //         new Vector2f(0,0),
-    //         new Vector2f(0,1)
-    //     };
-
-    //     this.texCoords = texCoords;
-    // }
-
-    // // Constructor for a singular sprite within a provided sprite sheet texture to sample from
-    // public Sprite(Texture texture, Vector2f[] texCoords){
-    //     this.texture = texture;
-    //     this.texCoords = texCoords;
-    // }
+    
+    private float spriteWidth;
+    private float spriteHeight;
 
     public Sprite(){
 
@@ -45,12 +29,28 @@ public class Sprite {
         this.texCoords = texCoords;
     }
 
+    public void setWidth(float width){
+        this.spriteWidth = width;
+    }
+
+    public void setHeight(float height){
+        this.spriteHeight = height;
+    }
+
     public Texture getTexture(){
         return texture;
     }
 
     public Vector2f[] getTexCoords(){
         return texCoords;
+    }
+
+    public float getWidth(){
+        return spriteWidth;
+    }
+
+    public float getHeight(){
+        return spriteHeight;
     }
 
 }

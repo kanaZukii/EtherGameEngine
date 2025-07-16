@@ -14,6 +14,7 @@ public class Spritesheet {
 
     public Spritesheet(Texture texture, int spriteWidth, int spriteHeight, int numSprites, int spacing){
         this.texture = texture;
+
         int currentX = 0;
         int currentY = texture.getHeight() - spriteHeight; // Bottom corner of the first top left sprite in the sheet
 
@@ -34,6 +35,9 @@ public class Spritesheet {
             Sprite newSprite = new Sprite();
             newSprite.setTexture(texture);
             newSprite.setTexCoords(texCoords);
+            newSprite.setWidth(spriteWidth);
+            newSprite.setHeight(spriteHeight);
+            
             sprites.add(newSprite);
 
             currentX += spriteWidth + spacing;
@@ -46,5 +50,9 @@ public class Spritesheet {
 
     public Sprite getSprite(int index){
         return sprites.get(index);
+    }
+
+    public int getSize(){
+        return sprites.size();
     }
 }

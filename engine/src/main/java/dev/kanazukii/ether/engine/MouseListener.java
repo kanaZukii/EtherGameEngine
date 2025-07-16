@@ -3,6 +3,11 @@ package dev.kanazukii.ether.engine;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
+import java.util.Vector;
+
+import org.joml.Vector4f;
+import org.joml.Vector4i;
+
 public class MouseListener{
 
     private static MouseListener instance;
@@ -37,6 +42,9 @@ public class MouseListener{
         get().yPos = yPos;
 
         get().mouseDragging = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
+
+        System.out.println(getOrthoX());
+        System.out.println(getOrthoY());
     }
 
     public static void mouseButtonCallback(long window, int button, int action, int mods)
@@ -76,6 +84,29 @@ public class MouseListener{
 
     public static float getY(){
         return (float)get().yPos;
+    
+    }
+
+    public static float getOrthoX(){
+        float currentX = getX();
+        currentX = (currentX / (float)Window.getWidth()) * 2.0f - 1.0f;
+        Vector4f temp = new Vector4f(currentX,0,0,1);
+        Camera camera = Window.getScene().getCamera();
+        temp.mul(camera.getInverseProjection().mul(camera.getInverseView()));
+        currentX = temp.x;
+        
+        return currentX;
+    }
+
+    public static float getOrthoY(){
+        float currentY = getY();
+        currentY = (currentY/(float)Window.getHeight()) * 2.0f - 1.0f;
+        Vector4f temp = new Vector4f(0,currentY,0,1);
+        Camera camera = Window.getScene().getCamera();
+        temp.mul(camera.getInverseProjection().mul(camera.getInverseView()));
+        currentY = temp.y;
+
+        return currentY;
     }
 
     public static float getDx(){

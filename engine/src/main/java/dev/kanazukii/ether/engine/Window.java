@@ -71,7 +71,7 @@ public class Window {
         this.title = "Hello World!";
 
         this.r = 1;
-        this.g = 1;
+        this.g = 0;
         this.b = 1;
         this.a = 1;
     }
