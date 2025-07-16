@@ -166,13 +166,18 @@ public class RenderBatch implements Comparable<RenderBatch> {
         Vector2f[] texCoords = sprite.getTexCoords();
 
         int texID = 0;  // 0 is reserved for sprite with no texture
+        boolean found = false;
         // [0, texture, texture]
         if(sprite.getTexture() != null){
             for(int i = 0; i < textures.size(); i++){
-                if(textures.get(i) == sprite.getTexture()){
+                if(textures.get(i).getFilePath().equals(sprite.getTexture().getFilePath()) ){
                     texID = i + 1;
+                    found = true;
                     break;
-                }
+                } 
+            }
+            if(!found){
+                System.err.println( sprite.gameObject.getName() + ": sprite texture Exist but cannot be found!");
             }
         }
 

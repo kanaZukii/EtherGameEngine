@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Text;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -77,6 +79,7 @@ public abstract class Scene {
                         .setPrettyPrinting()
                         .registerTypeAdapter(Component.class, new ComponentDeserializer())
                         .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
+                        .registerTypeAdapter(Texture.class, new TextureDeserializer())
                         .create();
         try {
             FileWriter writer = new FileWriter("gamescene.txt");
@@ -92,6 +95,7 @@ public abstract class Scene {
                         .setPrettyPrinting()
                         .registerTypeAdapter(Component.class, new ComponentDeserializer())
                         .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
+                        .registerTypeAdapter(Texture.class, new TextureDeserializer())
                         .create();
         String savedScene = "";
 

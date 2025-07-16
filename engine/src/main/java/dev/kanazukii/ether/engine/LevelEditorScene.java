@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.GsonBuildConfig;
 
+import dev.kanazukii.ether.engine.components.RigidBody;
 import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
@@ -19,9 +20,8 @@ public class LevelEditorScene extends Scene {
         System.out.println("Level Editor Scene");
     }
 
-    private GameObject skeleton;
     private Spritesheet test_sheet;
-
+    
     @Override
     public void init() {
 
@@ -30,28 +30,31 @@ public class LevelEditorScene extends Scene {
         camera = new Camera(new Vector2f());
 
         test_sheet = AssetPool.getSpriteSheet("assets/textures/skeleton_spritesheet.png");
+        
+        if(sceneLoaded){
+            this.activeGameObject = gameObjects.get(1);
+            return;
+        }
 
         GameObject testSquare = new GameObject("Square", new Transform(new Vector2f(100, 100), new Vector2f(250, 250)),0);
         SpriteRenderer testSpriteRenderer = new SpriteRenderer();
-        testSpriteRenderer.setColor(new Vector4f(0,0,0,1));
+        testSpriteRenderer.setColor(new Vector4f(1,0,0,1));
         testSquare.addComponent(testSpriteRenderer);
         addGameObject(testSquare);
 
         SpriteRenderer skeletonSprite = new SpriteRenderer();
         skeletonSprite.setSprite(test_sheet.getSprite(0));
-        skeleton = new GameObject("Skeleton", new Transform(new Vector2f(350, 100), new Vector2f(64, 64)), 1);
+        GameObject skeleton = new GameObject("Skeleton", new Transform(new Vector2f(350, 100), new Vector2f(64, 64)), 1);
         skeleton.addComponent(skeletonSprite);
+        skeleton.addComponent(new RigidBody());
         addGameObject(skeleton);
 
-        this.activeGameObject = skeleton;
 
-        System.out.println("Game Objects in Scene: " + gameObjects.size());
+        this.activeGameObject = gameObjects.get(1);
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        System.out.println(gson.toJson(skeleton));
     }
-
+    
+    // TODO: FIX Texture loading mismatch when load order changed (Texture frist time used in update)
     private void loadAssets(){
         AssetPool.getShader("assets/shaders/default.glsl");
 
@@ -60,9 +63,9 @@ public class LevelEditorScene extends Scene {
                                     16, 16, 32, 0));
     }
 
-    private float tick = 0;
+    private float tick = 0.1f;
+    private float current =  0.0f;
     private int spriteIndex = 4;
-    
 
     @Override
     public void update(float deltaTime) {
@@ -72,18 +75,20 @@ public class LevelEditorScene extends Scene {
             gameObject.update(deltaTime);
         }
 
-        if(tick >= 0.1f){
-            tick = 0;
-            spriteIndex++;
+        current += deltaTime;
+        if(current >= tick){
+            current = 0;
             if(spriteIndex >= 8){
                 spriteIndex = 4;
-            }
-            skeleton.getComponent(SpriteRenderer.class).setSprite(test_sheet.getSprite(spriteIndex));
+            }  
+            gameObjects.get(1).getComponent(SpriteRenderer.class).setSprite(test_sheet.getSprite(spriteIndex));
+            spriteIndex++;
+        }
+
+        if(gameObjects.get(1).transform != null){
+             gameObjects.get(1).transform.position.x += 50 * deltaTime;
         }
         
-        skeleton.transform.position.x += 50 * deltaTime;
-        
-        tick += deltaTime;
         renderer.render();
     }
 

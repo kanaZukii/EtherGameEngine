@@ -19,6 +19,7 @@ import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
 import static org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load;
 import static org.lwjgl.stb.STBImage.stbi_load;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -31,8 +32,8 @@ import org.lwjgl.system.MemoryUtil;
 public class Texture {
     
     private String filepath;
-    private int textureID;
-    private int width, height;
+    private transient int textureID;
+    private transient int width, height;
 
     public Texture(){
         
@@ -44,7 +45,7 @@ public class Texture {
         // Generate Texture on GPU
         textureID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, textureID);
-
+        
         // Set Texture parameters
         // Repeat Image in both directions
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Wrap X
@@ -73,8 +74,7 @@ public class Texture {
 
             this.width = width.get(0);
             this.height = height.get(0);
-            
-            System.out.println("Texture loaded");
+            System.out.println(filepath + " LOADED " + textureID);
         } else {
             assert false : "Error: Texture Could not load Image" + filepath + ""; 
         }
@@ -114,6 +114,10 @@ public class Texture {
 
     public int getHeight(){
         return height;
+    }
+
+    public String getFilePath(){
+        return filepath;
     }
 
     public void bind(){
