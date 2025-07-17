@@ -1,4 +1,4 @@
-package dev.kanazukii.ether.engine;
+package dev.kanazukii.ether.engine.components;
 
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_REPEAT;

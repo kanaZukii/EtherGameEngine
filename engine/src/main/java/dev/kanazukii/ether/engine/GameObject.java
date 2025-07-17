@@ -3,8 +3,14 @@ package dev.kanazukii.ether.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.kanazukii.ether.engine.components.Component;
+import dev.kanazukii.ether.engine.components.Transform;
+
 public class GameObject {
     
+    private static int ID_Count = 0;
+    private int uID = -1;
+
     private String name;
     private int zIndex;
     // List of all components (Sprite render and etc.) of the object
@@ -17,6 +23,9 @@ public class GameObject {
         this.components = new ArrayList<>();
         this.transform = new Transform();
         this.zIndex = 0;
+
+        // TODO: Fix uID assignment when loading serialized saved scenes
+        generateID();
     }
 
     // Constructor for game object with a transform (Scale and position)
@@ -25,6 +34,9 @@ public class GameObject {
         this.zIndex = zIndex;
         this.components = new ArrayList<>();
         this.transform = transform;
+
+        // TODO: Fix uID assignment when loading serialized saved scenes
+        generateID();
     }
 
     public String getName(){
@@ -58,8 +70,13 @@ public class GameObject {
         }
     }
 
+    public List<Component> getComponentList(){
+        return components;
+    }
+
     // Add a component to the Object
     public void addComponent (Component component){
+        component.generateID();
         components.add(component);
         component.gameObject = this;
     }
@@ -88,4 +105,18 @@ public class GameObject {
         }
     }
 
+    private void generateID(){
+        if(this.uID == -1){
+            this.uID = ID_Count;
+            ID_Count++;
+        }
+    }
+
+    public static void init(int maxID){
+        ID_Count = maxID;
+    }
+
+    public int getUID(){
+        return uID;
+    }
 }

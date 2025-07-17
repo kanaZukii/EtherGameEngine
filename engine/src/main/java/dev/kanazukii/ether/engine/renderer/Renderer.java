@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import dev.kanazukii.ether.engine.GameObject;
-import dev.kanazukii.ether.engine.Texture;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
+import dev.kanazukii.ether.engine.components.Texture;
 
 public class Renderer {
     

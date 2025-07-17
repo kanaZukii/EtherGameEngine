@@ -1,4 +1,4 @@
-package dev.kanazukii.ether.engine;
+package dev.kanazukii.ether.engine.components;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -6,10 +6,14 @@ import java.lang.reflect.Modifier;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import dev.kanazukii.ether.engine.GameObject;
 import imgui.ImGui;
 
 public abstract class Component {
     
+    private static int ID_Count = 0;
+    private int uID = -1;
+
     // Keeps a refernece to the parent game object (Should be overwritten in the child class)
     public transient GameObject gameObject = null;
 
@@ -65,6 +69,21 @@ public abstract class Component {
     // update method of the component (Should be overwritten in the child class)
     public void update(float deltaTime){
 
+    }
+
+    public void generateID(){
+        if(this.uID == -1){
+            this.uID = ID_Count;
+            ID_Count++;
+        }
+    }
+
+    public int getUID(){
+        return this.uID;
+    }
+
+    public static void init(int maxID){
+        ID_Count = maxID;
     }
 
 }

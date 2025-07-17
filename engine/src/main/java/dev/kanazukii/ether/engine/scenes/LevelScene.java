@@ -1,4 +1,4 @@
-package dev.kanazukii.ether.engine;
+package dev.kanazukii.ether.engine.scenes;
 
 public class LevelScene extends Scene{
 

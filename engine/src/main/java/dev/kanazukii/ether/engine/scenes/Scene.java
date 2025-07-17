@@ -1,4 +1,4 @@
-package dev.kanazukii.ether.engine;
+package dev.kanazukii.ether.engine.scenes;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,6 +13,13 @@ import org.w3c.dom.Text;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import dev.kanazukii.ether.engine.Camera;
+import dev.kanazukii.ether.engine.GameObject;
+import dev.kanazukii.ether.engine.GameObjectDeserializer;
+import dev.kanazukii.ether.engine.components.Component;
+import dev.kanazukii.ether.engine.components.ComponentDeserializer;
+import dev.kanazukii.ether.engine.components.Texture;
+import dev.kanazukii.ether.engine.components.TextureDeserializer;
 import dev.kanazukii.ether.engine.renderer.Renderer;
 import imgui.ImGui;
 
@@ -106,10 +113,29 @@ public abstract class Scene {
         }
 
         if(!savedScene.equals("")){
+            int maxGameObjectID = -1;
+            int maxComponentID = -1;
             GameObject[] gameObjects = gson.fromJson(savedScene, GameObject[].class);
             for(GameObject go: gameObjects){
                 addGameObject(go);
+
+                for(Component component : go.getComponentList()){
+                    if(component.getUID() > maxComponentID){
+                        maxComponentID = component.getUID();
+                    }
+                }
+
+                if(go.getUID() > maxGameObjectID){
+                        maxGameObjectID = go.getUID();
+                    }
             }
+
+            maxGameObjectID++;
+            maxComponentID++;
+            System.out.println(maxGameObjectID);
+            System.out.println(maxComponentID);
+            GameObject.init(maxGameObjectID);
+            Component.init(maxComponentID);
             sceneLoaded = true;
         }
     }

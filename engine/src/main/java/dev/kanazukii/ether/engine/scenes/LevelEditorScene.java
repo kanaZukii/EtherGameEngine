@@ -1,4 +1,4 @@
-package dev.kanazukii.ether.engine;
+package dev.kanazukii.ether.engine.scenes;
 
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -7,10 +7,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.GsonBuildConfig;
 
+import dev.kanazukii.ether.engine.Camera;
+import dev.kanazukii.ether.engine.GameObject;
+import dev.kanazukii.ether.engine.Prefabs;
+import dev.kanazukii.ether.engine.components.MouseControls;
 import dev.kanazukii.ether.engine.components.RigidBody;
 import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
+import dev.kanazukii.ether.engine.components.Transform;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -22,7 +27,10 @@ public class LevelEditorScene extends Scene {
     }
 
     private Spritesheet test_sheet;
+    private Spritesheet test_sheet2;
     private Spritesheet tile_set;
+
+    private MouseControls mouse = new MouseControls();
 
     @Override
     public void init() {
@@ -66,7 +74,6 @@ public class LevelEditorScene extends Scene {
         AssetPool.addSpriteSheet("assets/textures/skeleton_spritesheet.png", 
                                 new Spritesheet(AssetPool.getTexture("assets/textures/skeleton_spritesheet.png"), 
                                     16, 16, 8, 0));
-
     }
 
     private float tick = 0.1f;
@@ -76,6 +83,7 @@ public class LevelEditorScene extends Scene {
     @Override
     public void update(float deltaTime) {
         //System.out.println("FPS: " + String.valueOf(Window.FPS));
+        mouse.update(deltaTime);
 
         for (GameObject gameObject: gameObjects){
             gameObject.update(deltaTime);
@@ -123,6 +131,8 @@ public class LevelEditorScene extends Scene {
             ImGui.pushID(i);
             if(ImGui.imageButton(id, icon_width, icon_height, texCoords[0].x, texCoords[0].y, texCoords[2].x, texCoords[2].y)){
                 System.out.println("Clicked: " + i);
+                GameObject tile = Prefabs.createSpriteObj(tile_icon, icon_width, icon_height);
+                mouse.pickUpObject(tile);
             }
             ImGui.popID();
 

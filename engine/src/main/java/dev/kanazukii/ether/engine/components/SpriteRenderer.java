@@ -3,9 +3,6 @@ package dev.kanazukii.ether.engine.components;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-import dev.kanazukii.ether.engine.Component;
-import dev.kanazukii.ether.engine.Texture;
-import dev.kanazukii.ether.engine.Transform;
 import imgui.ImGui;
 
 public class SpriteRenderer extends Component{

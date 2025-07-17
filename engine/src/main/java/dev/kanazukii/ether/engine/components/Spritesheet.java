@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.joml.Vector2f;
 
-import dev.kanazukii.ether.engine.Texture;
-
 public class Spritesheet {
     
     private Texture texture;

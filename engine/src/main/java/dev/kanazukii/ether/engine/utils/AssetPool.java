@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import dev.kanazukii.ether.engine.Texture;
 import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.Spritesheet;
+import dev.kanazukii.ether.engine.components.Texture;
 import dev.kanazukii.ether.engine.renderer.Shader;
 
 public class AssetPool {

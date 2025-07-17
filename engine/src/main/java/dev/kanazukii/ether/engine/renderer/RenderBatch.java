@@ -26,9 +26,9 @@ import java.util.List;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-import dev.kanazukii.ether.engine.Texture;
 import dev.kanazukii.ether.engine.Window;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
+import dev.kanazukii.ether.engine.components.Texture;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class RenderBatch implements Comparable<RenderBatch> {

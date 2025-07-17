@@ -2,8 +2,6 @@ package dev.kanazukii.ether.engine.components;
 
 import org.joml.Vector2f;
 
-import dev.kanazukii.ether.engine.Texture;
-
 public class Sprite {
     
     private Texture texture = null;

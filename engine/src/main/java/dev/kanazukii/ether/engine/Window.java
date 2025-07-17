@@ -45,6 +45,9 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import dev.kanazukii.ether.engine.scenes.LevelEditorScene;
+import dev.kanazukii.ether.engine.scenes.LevelScene;
+import dev.kanazukii.ether.engine.scenes.Scene;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class Window {
@@ -57,7 +60,7 @@ public class Window {
 
     public float r, g, b, a;
 
-    private static Scene scene;
+    private static Scene currentScene;
 
     public static float FPS = 0.0f;
     public static int targetFPS = 0;
@@ -95,7 +98,7 @@ public class Window {
     }
 
     public static Scene getScene(){
-        return scene;
+        return currentScene;
     }
 
     public static void setHeight(int newHeight){
@@ -125,10 +128,10 @@ public class Window {
     public void changeScene(int index){
         switch (index) {
             case 0:
-                scene = new LevelEditorScene();
+                currentScene = new LevelEditorScene();
                 break;
             case 1:
-                scene = new LevelScene();
+                currentScene = new LevelScene();
                 break;
         
             default:
@@ -136,9 +139,9 @@ public class Window {
                 return;
         }
 
-        scene.loadScene();
-        scene.init();
-        scene.start();
+        currentScene.loadScene();
+        currentScene.init();
+        currentScene.start();
     }
 
     // Initialize and Create a GLFW window
@@ -221,19 +224,19 @@ public class Window {
             glClear(GL_COLOR_BUFFER_BIT);
 
             if(deltaTime >= 0){
-                scene.update(deltaTime);
+                currentScene.update(deltaTime);
             }
 
             FPS = (float)(1/deltaTime);
             
-            imGUILayer.update(deltaTime, scene);
+            imGUILayer.update(deltaTime, currentScene);
             glfwSwapBuffers(glfwWindow);
 
             endTime = (float)glfwGetTime();
             deltaTime = endTime - startTime;
             startTime = endTime;
         }
-        scene.saveAtExit();
+        currentScene.saveAtExit();
     }
 
 }

@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
+import dev.kanazukii.ether.engine.scenes.Scene;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
 import imgui.ImFontGlyphRangesBuilder;
@@ -89,6 +90,11 @@ public class ImGUILayer {
                 io.setKeyShift((mods & GLFW_MOD_SHIFT) != 0);
                 io.setKeyAlt((mods & GLFW_MOD_ALT) != 0);
                 io.setKeySuper((mods & GLFW_MOD_SUPER) != 0);
+
+                // If imGUI not listening to key inputs pass it to our KeyListener
+                if (!io.getWantCaptureKeyboard()) {
+                    KeyListener.keyCallback(w, key, scancode, action, mods);
+                }
         });
 
         glfwSetCharCallback(glfwWindowPtr, (w, c) -> {
@@ -110,6 +116,11 @@ public class ImGUILayer {
 
             if (!io.getWantCaptureMouse() && mouseDown[1]) {
                 ImGui.setWindowFocus(null);
+            }
+
+            // If imGUI not listening to mouse inputs pass it to our MouseListener
+            if (!io.getWantCaptureMouse()) {
+                MouseListener.mouseButtonCallback(w, button, action, mods);
             }
         });
 
