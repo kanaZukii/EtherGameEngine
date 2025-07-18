@@ -45,6 +45,7 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import dev.kanazukii.ether.engine.renderer.DebugRenderer;
 import dev.kanazukii.ether.engine.scenes.LevelEditorScene;
 import dev.kanazukii.ether.engine.scenes.LevelScene;
 import dev.kanazukii.ether.engine.scenes.Scene;
@@ -220,10 +221,13 @@ public class Window {
             //Poll Events for key listeners
             glfwPollEvents();
 
+            DebugRenderer.beginFrame();
+
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT);
 
             if(deltaTime >= 0){
+                DebugRenderer.render();
                 currentScene.update(deltaTime);
             }
 
