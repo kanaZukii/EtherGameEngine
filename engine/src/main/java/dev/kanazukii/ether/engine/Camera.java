@@ -12,6 +12,12 @@ public class Camera {
     // Varibales in controlling the camera in 2d plane (The vector for the bottom left corner of the camera)
     private Vector2f position;
 
+    private float worldUnits = 32.0f;
+    private float width = 40.0f;
+    private float height = 21.0f;
+    private float farZ = 100.0f; // Farthest in the z axis (Doesn't really matter because we are in 2D)
+    private Vector2f proejectionSize = new Vector2f(worldUnits * width, worldUnits * height); // 1280 x 672
+
     public Camera(Vector2f position){
         this.position = position;
         this.projectionMatrix = new Matrix4f();
@@ -42,15 +48,14 @@ public class Camera {
         return projectionMatrix;
     }
 
+    public Vector2f getProjectionSize(){
+        return proejectionSize;
+    }
+
     // Camera view area base on game tile size (in pixels) and the farthest z index
     public void adjustProjection(){
-        float tileSize = 32.0f;
-        float width = 40.0f;
-        float height = 21.0f;
-        float farZ = 100.0f;
-
         projectionMatrix.identity();
-        projectionMatrix.ortho(0.0f, tileSize * width, 0.0f, tileSize * height, 0, farZ);
+        projectionMatrix.ortho(0.0f, proejectionSize.x, 0.0f, proejectionSize.y, 0, farZ);
         projectionMatrix.invert(inverseProjection);
     }
 

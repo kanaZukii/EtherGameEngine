@@ -60,8 +60,7 @@ public class DebugRenderer {
         glVertexAttribPointer( 1,3,GL_FLOAT, false, 6 * Float.BYTES, 3 * Float.BYTES);
         glEnableVertexAttribArray(1);
 
-        //TODO: Set width
-        glLineWidth(4.0f);
+        glLineWidth(2.0f);
     }
 
     public static void beginFrame(){
@@ -105,7 +104,8 @@ public class DebugRenderer {
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, Arrays.copyOfRange(vertexArr, 0, lines.size() * 6 *2));
+        int lineVertexCount = lines.size() * 2;
+        glBufferSubData(GL_ARRAY_BUFFER, 0, Arrays.copyOfRange(vertexArr, 0, lineVertexCount*6));
 
         // Use the shader
         shader.use();
@@ -118,7 +118,7 @@ public class DebugRenderer {
         glEnableVertexAttribArray(1);
 
         // Draw the batch
-        glDrawArrays(GL_LINES, 0, lines.size() * 6 *2);
+        glDrawArrays(GL_LINES, 0, lineVertexCount);
         
         // Disable Location
         glDisableVertexAttribArray(0);

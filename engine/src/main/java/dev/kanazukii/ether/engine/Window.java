@@ -59,7 +59,7 @@ public class Window {
     private static Window window = null;
     private long glfwWindow;
 
-    public float r, g, b, a;
+    public float BG_r, BG_g, BG_b, BG_a;
 
     private static Scene currentScene;
 
@@ -74,10 +74,10 @@ public class Window {
         this.height = 1080;
         this.title = "Hello World!";
 
-        this.r = 1;
-        this.g = 0;
-        this.b = 1;
-        this.a = 1;
+        this.BG_r = 0.4f;
+        this.BG_g = 0.4f;
+        this.BG_b = 0.4f;
+        this.BG_a = 1;
     }
 
     // Create one instance of Window
@@ -223,7 +223,7 @@ public class Window {
 
             DebugRenderer.beginFrame();
 
-            glClearColor(r, g, b, a);
+            glClearColor(BG_r, BG_g, BG_b, BG_a);
             glClear(GL_COLOR_BUFFER_BIT);
 
             if(deltaTime >= 0){
