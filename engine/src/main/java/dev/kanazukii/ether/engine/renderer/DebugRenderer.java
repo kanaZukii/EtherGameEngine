@@ -27,6 +27,7 @@ import org.joml.Vector3f;
 
 import dev.kanazukii.ether.engine.Window;
 import dev.kanazukii.ether.engine.utils.AssetPool;
+import dev.kanazukii.ether.engine.utils.Maths;
 
 public class DebugRenderer {
     
@@ -145,6 +146,63 @@ public class DebugRenderer {
     public static void addLine2D(Vector2f start, Vector2f end, Vector3f color, int duration){
         if(lines.size() >= MAX_LINES) return;
         lines.add(new Line2D(start, end, color, duration));
+    }
+
+    public static void addRect2D(Vector2f center, Vector2f dimension, float rotation){
+        addRect2D(center, dimension, rotation, new Vector3f(1,0,0), 1);
+    }
+
+    public static void addRect2D(Vector2f center, Vector2f dimension, float rotation, Vector3f color){
+        addRect2D(center, dimension, rotation, color, 1);
+    }
+
+    public static void addRect2D(Vector2f center, Vector2f dimension, float rotation, Vector3f color, int duration){
+        Vector2f min = new Vector2f(center).sub(new Vector2f(dimension).div(2.0f));
+        Vector2f max = new Vector2f(center).add(new Vector2f(dimension).div(2.0f));
+
+        Vector2f[] vertices = {
+            new Vector2f(min.x, min.y), new Vector2f(min.x, max.y),
+            new Vector2f(max.x, max.y), new Vector2f(max.x, min.y)
+        };
+
+        if(rotation != 0.0f){
+            for(Vector2f vector : vertices){
+                Maths.rotate(vector, rotation, center);
+            }
+        }
+
+        addLine2D(vertices[0], vertices[1], color, duration);
+        addLine2D(vertices[1], vertices[2], color, duration);
+        addLine2D(vertices[2], vertices[3], color, duration);
+        addLine2D(vertices[3], vertices[0], color, duration);
+    }
+
+    public static void addCircle2D(Vector2f center, float radius){
+        addCircle2D(center, radius, new Vector3f(1,0,0), 1);
+    }
+
+    public static void addCircle2D(Vector2f center, float radius, Vector3f color){
+        addCircle2D(center, radius, color, 1);
+    }
+
+    public static void addCircle2D(Vector2f center, float radius, Vector3f color, int duration){
+        Vector2f[] points = new Vector2f[24];
+        float increment = 360 / points.length;
+        float currentAngle = 0;
+
+        for(int i = 0; i < points.length; i++){
+            Vector2f tmp = new Vector2f(radius, 0);
+            Maths.rotate(tmp, currentAngle, new Vector2f());
+            points[i] = new Vector2f(tmp).add(center);
+
+            if(i > 0){
+                addLine2D(points[i-1], points[i], color, duration);
+            }
+
+            currentAngle += increment;
+        }
+
+        addLine2D(points[points.length-1], points[0], color, duration);
     }
 
 }

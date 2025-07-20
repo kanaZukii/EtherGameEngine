@@ -19,4 +19,19 @@ public class Prefabs {
         return spriteObj;
     }
 
+    public static GameObject duplicateSpriteObj(GameObject spriteObj){
+        GameObject newSpriteObj = new GameObject("SpriteObj_GeneratedDup",
+                                                spriteObj.transform.copy(),
+                                                0);
+
+        Sprite dupSprite = new Sprite();
+        dupSprite.setTexture(spriteObj.getComponent(SpriteRenderer.class).getTexture());
+        dupSprite.setTexCoords(spriteObj.getComponent(SpriteRenderer.class).getTexCoords());
+        SpriteRenderer spriterenderer = new SpriteRenderer();
+        spriterenderer.setSprite(dupSprite);
+        newSpriteObj.addComponent(spriterenderer);
+
+        return newSpriteObj;
+    }
+
 }
