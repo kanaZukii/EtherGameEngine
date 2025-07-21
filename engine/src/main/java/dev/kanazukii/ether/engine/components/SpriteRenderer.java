@@ -2,6 +2,7 @@ package dev.kanazukii.ether.engine.components;
 
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import org.w3c.dom.Text;
 
 import imgui.ImGui;
 
@@ -16,20 +17,6 @@ public class SpriteRenderer extends Component{
     private transient Transform lastTransform;
     private transient boolean isDirty = false;
 
-    // // Construtor for a sprite renderer for a colored shape (Before gson)
-    // public SpriteRenderer(Vector4f color){
-    //     this.color = color;
-    //     this.sprite = new Sprite(null);
-    //     isDirty = true;
-    // }
-
-    // // Construtor for a sprite renderer to render a sampled sprite from a spritesheet
-    // public SpriteRenderer(Sprite sprite){
-    //     this.sprite = sprite;
-    //     this.color = new Vector4f(1,1,1,1);
-    //     isDirty = true;
-    // }
-
     public SpriteRenderer(){
         isDirty = true;
     }
@@ -40,6 +27,10 @@ public class SpriteRenderer extends Component{
 
     public Vector4f getColor(){
         return color;
+    }
+
+    public void setTexture(Texture texture){
+        sprite.setTexture(texture);
     }
 
     public Texture getTexture(){

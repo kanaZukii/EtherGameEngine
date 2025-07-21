@@ -16,10 +16,14 @@ import imgui.ImGuiIO;
 import imgui.callback.ImStrConsumer;
 import imgui.callback.ImStrSupplier;
 import imgui.flag.ImGuiBackendFlags;
+import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.flag.ImGuiKey;
 import imgui.flag.ImGuiMouseCursor;
+import imgui.flag.ImGuiStyleVar;
+import imgui.flag.ImGuiWindowFlags;
 import imgui.gl3.ImGuiImplGl3;
+import imgui.type.ImBoolean;
 
 public class ImGUILayer {
 
@@ -48,6 +52,7 @@ public class ImGUILayer {
 
         io.setIniFilename("imGui.ini"); // We don't want to save .ini file
         io.setConfigFlags(ImGuiConfigFlags.NavEnableKeyboard); // Navigation with keyboard
+        io.setConfigFlags(ImGuiConfigFlags.DockingEnable); // For window docking
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
 
@@ -65,6 +70,7 @@ public class ImGUILayer {
         imGuiGl3.init(glslVersion);
     }
 
+    // TODO: FN Key combination crashing the app
     private void initInputs(ImGuiIO io){
         // Mouse cursors mapping
         mouseCursors[ImGuiMouseCursor.Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
@@ -212,6 +218,25 @@ public class ImGUILayer {
         }
     }
 
+    private void setDockSpace(){
+        int windowFlags = ImGuiWindowFlags.MenuBar | ImGuiWindowFlags.NoDocking;
+
+        ImGui.setNextWindowPos(0.0f, 0.0f, ImGuiCond.Always);
+        ImGui.setNextWindowSize(Window.getWidth(), Window.getHeight());
+
+        ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0.0f);
+        ImGui.pushStyleVar(ImGuiStyleVar.WindowBorderSize, 0.0f);
+
+        windowFlags |= ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize |
+                    ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoNavFocus;
+
+        ImGui.begin("DockSpace", new ImBoolean(true), windowFlags);
+        ImGui.popStyleVar(2);
+
+        // DockSpace
+        ImGui.dockSpace(ImGui.getID("DockSpace"));
+    }
+
 
     public void update(float deltaTime, Scene scene){
         startFrame(deltaTime);
@@ -219,9 +244,11 @@ public class ImGUILayer {
         // Any Dear ImGui code SHOULD go between ImGui.newFrame()/ImGui.render() methods
         imGuiGl3.newFrame(); 
         ImGui.newFrame();
+        setDockSpace();
         scene.ImGUI();
         scene.sceneImGUI();
         ImGui.showDemoWindow();
+        ImGui.end();
         ImGui.render();
 
         endFrame();
