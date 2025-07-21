@@ -36,7 +36,22 @@ public class Texture {
     private transient int width, height;
 
     public Texture(){
-        
+        textureID = -1;
+        width = -1;
+        height = -1;
+    }
+
+    public Texture(int width, int height){
+        this.width = width;
+        this.height = height;
+
+        this.filepath = "NONE (Generated)";
+
+        // Generate Texture on GPU
+        textureID = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+            
     }
 
     public void init(String filepath){
@@ -130,6 +145,16 @@ public class Texture {
 
     public void unBind(){
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(obj == null) return false;
+        if(!(obj instanceof Texture)) return false;
+        Texture textureObj = (Texture) obj;
+
+        return textureObj.getWidth() ==  this.width && textureObj.getHeight() == this.height &&
+            textureObj.getID() == this.textureID && textureObj.getFilePath().equals(this.filepath);
     }
 
 }
