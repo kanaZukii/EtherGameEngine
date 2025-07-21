@@ -46,6 +46,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
 import dev.kanazukii.ether.engine.renderer.DebugRenderer;
+import dev.kanazukii.ether.engine.renderer.FrameBuffer;
 import dev.kanazukii.ether.engine.scenes.LevelEditorScene;
 import dev.kanazukii.ether.engine.scenes.LevelScene;
 import dev.kanazukii.ether.engine.scenes.Scene;
@@ -58,6 +59,7 @@ public class Window {
 
     private static Window window = null;
     private long glfwWindow;
+    private FrameBuffer framebuffer;
 
     public float BG_r, BG_g, BG_b, BG_a;
 
@@ -200,6 +202,9 @@ public class Window {
         imGUILayer = new ImGUILayer(glfwWindow);
         imGUILayer.initImGui();
 
+        // Binded to the screen size
+        framebuffer = new FrameBuffer(1920, 1080);
+
         //GL Info
         System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
         System.out.println("Renderer: " + glGetString(GL_RENDERER));
@@ -226,10 +231,12 @@ public class Window {
             glClearColor(BG_r, BG_g, BG_b, BG_a);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            //framebuffer.bind();
             if(deltaTime >= 0){
                 DebugRenderer.render();
                 currentScene.update(deltaTime);
             }
+            //framebuffer.unbind();
 
             FPS = (float)(1/deltaTime);
             
