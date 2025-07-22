@@ -38,7 +38,7 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glGetString;
-
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.Version;
@@ -59,7 +59,7 @@ public class Window {
 
     private static Window window = null;
     private long glfwWindow;
-    private FrameBuffer framebuffer;
+    private static FrameBuffer framebuffer;
 
     public float BG_r, BG_g, BG_b, BG_a;
 
@@ -76,9 +76,9 @@ public class Window {
         this.height = 1080;
         this.title = "Hello World!";
 
-        this.BG_r = 0.4f;
-        this.BG_g = 0.4f;
-        this.BG_b = 0.4f;
+        this.BG_r = 0.3f;
+        this.BG_g = 0.3f;
+        this.BG_b = 0.3f;
         this.BG_a = 1;
     }
 
@@ -102,6 +102,14 @@ public class Window {
 
     public static Scene getScene(){
         return currentScene;
+    }
+
+    public static FrameBuffer getFrameBuffer(){
+        return framebuffer;
+    }
+
+    public static float getTargetAspectRatio(){
+        return 16.0f / 9.0f;  // Should be dynamic get the user's screen aspect ratio
     }
 
     public static void setHeight(int newHeight){
@@ -204,6 +212,7 @@ public class Window {
 
         // Binded to the screen size
         framebuffer = new FrameBuffer(1920, 1080);
+        glViewport(0, 0, 1920, 1080);
 
         //GL Info
         System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
@@ -227,16 +236,16 @@ public class Window {
             glfwPollEvents();
 
             DebugRenderer.beginFrame();
+            framebuffer.bind();
 
             glClearColor(BG_r, BG_g, BG_b, BG_a);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            //framebuffer.bind();
             if(deltaTime >= 0){
                 DebugRenderer.render();
                 currentScene.update(deltaTime);
             }
-            //framebuffer.unbind();
+            framebuffer.unbind();
 
             FPS = (float)(1/deltaTime);
             

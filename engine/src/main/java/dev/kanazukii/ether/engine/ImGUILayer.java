@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
+import dev.kanazukii.ether.engine.editor.GameViewWindow;
 import dev.kanazukii.ether.engine.scenes.Scene;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
@@ -247,6 +248,7 @@ public class ImGUILayer {
         setDockSpace();
         scene.ImGUI();
         scene.sceneImGUI();
+        GameViewWindow.ImGUI();
         ImGui.showDemoWindow();
         ImGui.end();
         ImGui.render();

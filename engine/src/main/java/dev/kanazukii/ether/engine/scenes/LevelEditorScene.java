@@ -128,8 +128,8 @@ public class LevelEditorScene extends Scene {
         for(int i = 0; i < tile_set.getSize(); i++){
             Sprite tile_icon = tile_set.getSprite(i);
 
-            float icon_width = tile_icon.getWidth() * 4;
-            float icon_height = tile_icon.getHeight() * 4;
+            float icon_width = tile_icon.getWidth() * 3;
+            float icon_height = tile_icon.getHeight() * 3;
             int id = tile_icon.getTexture().getID();
             Vector2f[] texCoords =  tile_icon.getTexCoords();
 
