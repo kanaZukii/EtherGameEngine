@@ -126,7 +126,7 @@ public class ImGUILayer {
             }
 
             // If imGUI not listening to mouse inputs pass it to our MouseListener
-            if (!io.getWantCaptureMouse()) {
+            if (!io.getWantCaptureMouse() || !GameViewWindow.getWantCaptureMouse()) {
                 MouseListener.mouseButtonCallback(w, button, action, mods);
             }
         });

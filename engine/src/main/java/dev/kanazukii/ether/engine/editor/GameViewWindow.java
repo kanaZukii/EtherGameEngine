@@ -1,5 +1,8 @@
 package dev.kanazukii.ether.engine.editor;
 
+import org.joml.Vector2f;
+
+import dev.kanazukii.ether.engine.MouseListener;
 import dev.kanazukii.ether.engine.Window;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -9,20 +12,31 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.internal.ImGuiWindow;
 
 public class GameViewWindow {
+
+    private static float leftX, rightX, topY, botY;
     
     public static void ImGUI(){
-
-        //ImGui.pushStyleColor(ImGuiCol.WindowBg, new ImVec4(0.4f, 0.4f, 0.4f, 1.0f)); // Set window background to red
         ImGui.begin("Scene Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
-        //ImGui.popStyleColor();
 
         ImVec2 windowSize = getFitSizeViewPort();
         ImVec2 windowPos = getCenteredPosViewPort(windowSize);
 
         ImGui.setCursorPos(windowPos);
+
+        ImVec2 topLeftCorner = new ImVec2();
+        ImGui.getCursorScreenPos(topLeftCorner);
+        topLeftCorner.x -= ImGui.getScrollX();
+        topLeftCorner.y -= ImGui.getScrollY();
+        leftX = topLeftCorner.x;
+        botY = topLeftCorner.y;
+        rightX = leftX + windowSize.x;
+        topY = botY + windowSize.y;
+
         int textureID = Window.getFrameBuffer().getTextureID();
         ImGui.image(textureID, windowSize.x, windowSize.y, 0, 1,1,0);
 
+        MouseListener.setViewPortPosition(new Vector2f(topLeftCorner.x, topLeftCorner.y));
+        MouseListener.setViewPortSize(new Vector2f(windowSize.x, windowSize.y));
 
         ImGui.end();
     }
@@ -54,6 +68,12 @@ public class GameViewWindow {
         float viewPortY = (windowSize.y/2.0f) - (aspectSize.y/2.0f);
 
         return new ImVec2(viewPortX + ImGui.getCursorPosX(), viewPortY + ImGui.getCursorPosY());
+    }
+
+    // TODO: Fix boundary checking, blocks being placed when ImGui take inputs
+    public static boolean getWantCaptureMouse(){
+        return MouseListener.getX() >= leftX && MouseListener.getX() <= rightX &&
+            MouseListener.getY() >= topY && MouseListener.getY() <= botY;
     }
 
 
