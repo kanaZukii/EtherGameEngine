@@ -13,6 +13,7 @@ import imgui.internal.ImGuiWindow;
 
 public class GameViewWindow {
 
+    // TODO: Should be seperated from the engine
     private static float leftX, rightX, topY, botY;
     
     public static void ImGUI(){

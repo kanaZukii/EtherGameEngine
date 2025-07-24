@@ -143,4 +143,7 @@ public abstract class Scene {
     // Scene update logic
     public abstract void update(float deltaTime);
 
+     // Call your renderer to draw all the objects
+    public abstract void render();
+
 }

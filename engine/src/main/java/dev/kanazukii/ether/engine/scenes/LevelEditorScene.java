@@ -108,7 +108,6 @@ public class LevelEditorScene extends Scene {
             spriteIndex++;
         }
         
-        renderer.render();
     }
 
     @Override
@@ -154,6 +153,11 @@ public class LevelEditorScene extends Scene {
         }
 
         ImGui.end();
+    }
+
+    @Override
+    public void render() {
+        renderer.render();
     }
     
 }

@@ -29,7 +29,6 @@ import org.joml.Vector4f;
 import dev.kanazukii.ether.engine.Window;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Texture;
-import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class RenderBatch implements Comparable<RenderBatch> {
     /* Vertex  Layout of the vertex data that is being sent to the gpu to draw
@@ -68,13 +67,11 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
     private int vaoID, vboID; // Vertex Array Object & Vertex Buffer Object
     private int maxBatchSize;   // Maximum Object that it can render per draw call
-    private Shader shader;      // Shader program to be used (glsl)
     private int zIndex;     // Z index for blending
 
     public RenderBatch(int maxBatchSize, int zIndex) {
         System.out.println("Creating a Render Batch");
 
-        shader = AssetPool.getShader("assets/shaders/default.glsl");
         sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
         this.zIndex = zIndex;
@@ -259,7 +256,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
         }
 
         // Use shader
-        shader.use();
+        Shader shader = Renderer.getBoundShader();
         shader.uploadMat4f("uProjection", Window.getScene().getCamera().getProjectionMatrix());
         shader.uploadMat4f("uView", Window.getScene().getCamera().getViewMatrix());
 

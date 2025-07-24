@@ -86,15 +86,28 @@ public class MouseListener{
 
     public static float getY(){
         return (float)get().yPos;
-    
     }
-    
+
     public static void setViewPortSize(Vector2f viewPortSize){
         get().gameViewPortSize.set(viewPortSize);
     }
 
     public static void setViewPortPosition(Vector2f viewPortPos){
         get().gameViewPortPosition.set(viewPortPos);
+    }
+
+    public static float getSreenX(){
+        float currentX = getX() - get().gameViewPortPosition.x;
+        currentX = (currentX / (float)get().gameViewPortSize.x) * 1920.0f; // TODO: Make it dynamic, retrieve user's screen size
+        
+        return currentX;
+    }
+
+    public static float getSreenY(){
+        float currentY = getY() - get().gameViewPortPosition.y;
+        currentY = 1080.0f - ((currentY/(float)get().gameViewPortSize.y) * 1080.0f); // TODO: Make it dynamic, retrieve user's screen size
+
+        return currentY;
     }
 
     public static float getOrthoX(){

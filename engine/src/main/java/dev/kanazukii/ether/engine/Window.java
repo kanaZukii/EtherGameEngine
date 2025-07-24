@@ -47,6 +47,8 @@ import org.lwjgl.opengl.GL;
 
 import dev.kanazukii.ether.engine.renderer.DebugRenderer;
 import dev.kanazukii.ether.engine.renderer.FrameBuffer;
+import dev.kanazukii.ether.engine.renderer.Renderer;
+import dev.kanazukii.ether.engine.renderer.Shader;
 import dev.kanazukii.ether.engine.scenes.LevelEditorScene;
 import dev.kanazukii.ether.engine.scenes.LevelScene;
 import dev.kanazukii.ether.engine.scenes.Scene;
@@ -109,7 +111,7 @@ public class Window {
     }
 
     public static float getTargetAspectRatio(){
-        return 16.0f / 9.0f;  // Should be dynamic get the user's screen aspect ratio
+        return 16.0f / 9.0f;  // TODO: Should be dynamic get the user's screen aspect ratio
     }
 
     public static void setHeight(int newHeight){
@@ -210,7 +212,7 @@ public class Window {
         imGUILayer = new ImGUILayer(glfwWindow);
         imGUILayer.initImGui();
 
-        // Binded to the screen size
+        // Binded to the screen size TODO: Make it dynamic, match it to user's screen size
         framebuffer = new FrameBuffer(1920, 1080);
         glViewport(0, 0, 1920, 1080);
 
@@ -230,11 +232,13 @@ public class Window {
         float endTime = (float)glfwGetTime();
         float deltaTime = -1.0f;
         
+        Shader defaultShader = AssetPool.getShader("assets/shaders/default.glsl"); // TODO: To be change
+
         while(!glfwWindowShouldClose(glfwWindow))
         {
             //Poll Events for key listeners
             glfwPollEvents();
-
+            
             DebugRenderer.beginFrame();
             framebuffer.bind();
 
@@ -243,7 +247,9 @@ public class Window {
 
             if(deltaTime >= 0){
                 DebugRenderer.render();
+                Renderer.bindShader(defaultShader);
                 currentScene.update(deltaTime);
+                currentScene.render();
             }
             framebuffer.unbind();
 

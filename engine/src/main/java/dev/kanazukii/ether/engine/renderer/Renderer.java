@@ -13,6 +13,7 @@ public class Renderer {
     // Max render batch size and list of all batches of the renderer
     private final int MAX_BATCH_SIZE = 1000;
     private List<RenderBatch> batches;
+    private static Shader currentShader; // Shader program to be used (glsl)
 
     public Renderer(){
         batches = new ArrayList<>();
@@ -52,9 +53,19 @@ public class Renderer {
 
     // Loops through each batch and call the draw function
     public void render(){
+        currentShader.use();
         for(RenderBatch batch: batches){
             batch.render();
         }
+    }
+
+    public static Shader getBoundShader(){
+        return currentShader;
+    }
+
+
+    public static void bindShader(Shader shader){
+        currentShader = shader;
     }
 
 }
