@@ -88,8 +88,7 @@ public class MouseListener{
         return (float)get().yPos;
     
     }
-
-    // TODO: FIX Mouse Viewport offset and misalignment
+    
     public static void setViewPortSize(Vector2f viewPortSize){
         get().gameViewPortSize.set(viewPortSize);
     }
@@ -112,8 +111,8 @@ public class MouseListener{
     }
 
     public static float getOrthoY(){
-        float currentY = Window.getHeight() - getY() - get().gameViewPortPosition.y;
-        currentY = (currentY/(float)get().gameViewPortSize.y) * 2.0f - 1.0f;
+        float currentY = getY() - get().gameViewPortPosition.y;
+        currentY = -((currentY/(float)get().gameViewPortSize.y) * 2.0f - 1.0f);
         Vector4f temp = new Vector4f(0,currentY,0,1);
         Camera camera = Window.getScene().getCamera();
         Matrix4f inverseView = new Matrix4f();

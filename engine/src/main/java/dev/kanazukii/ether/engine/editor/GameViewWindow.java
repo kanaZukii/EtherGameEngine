@@ -28,9 +28,9 @@ public class GameViewWindow {
         topLeftCorner.x -= ImGui.getScrollX();
         topLeftCorner.y -= ImGui.getScrollY();
         leftX = topLeftCorner.x;
-        botY = topLeftCorner.y;
+        topY = topLeftCorner.y;
         rightX = leftX + windowSize.x;
-        topY = botY + windowSize.y;
+        botY = topY + windowSize.y;
 
         int textureID = Window.getFrameBuffer().getTextureID();
         ImGui.image(textureID, windowSize.x, windowSize.y, 0, 1,1,0);
@@ -70,7 +70,6 @@ public class GameViewWindow {
         return new ImVec2(viewPortX + ImGui.getCursorPosX(), viewPortY + ImGui.getCursorPosY());
     }
 
-    // TODO: Fix boundary checking, blocks being placed when ImGui take inputs
     public static boolean getWantCaptureMouse(){
         return MouseListener.getX() >= leftX && MouseListener.getX() <= rightX &&
             MouseListener.getY() >= topY && MouseListener.getY() <= botY;
