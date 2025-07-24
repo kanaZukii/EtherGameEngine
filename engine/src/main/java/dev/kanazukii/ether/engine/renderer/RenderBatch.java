@@ -33,8 +33,8 @@ import dev.kanazukii.ether.engine.components.Texture;
 public class RenderBatch implements Comparable<RenderBatch> {
     /* Vertex  Layout of the vertex data that is being sent to the gpu to draw
      *  --------------
-     *  Position        Color                        Tex Coords     Tex ID
-     *  float, float    float, float, float, float   float, float   float
+     *  Position        Color                        Tex Coords     Tex ID   GameOBj ID
+     *  float, float    float, float, float, float   float, float   float    float
      */
 
     // Constants for specifying the length of the each component in the vertex data
@@ -42,15 +42,17 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private final int COLOR_SIZE = 4;
     private final int TEX_COORDS_SIZE = 2;
     private final int TEX_ID_SIZE = 1;
+    private final int GameOBj_ID_SIZE = 1;
 
     // Constants for specifiying the offset (Where the string of component data begin) in float bytes
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
     private final int TEX_COORDS_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
     private final int TEX_ID_OFFSET = TEX_COORDS_OFFSET + TEX_COORDS_SIZE * Float.BYTES;
+     private final int GameOBj_ID_OFFSET = TEX_ID_OFFSET + TEX_ID_SIZE * Float.BYTES;
 
     // Specify the length of a the data array within a singular vertex 
-    private final int VERTEX_SIZE = 9;
+    private final int VERTEX_SIZE = 10;
     private final int VER_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     // list of sprites that is to be rendered
@@ -108,6 +110,9 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
         glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, false, VER_SIZE_BYTES, TEX_ID_OFFSET);
         glEnableVertexAttribArray(3);
+
+        glVertexAttribPointer(4, GameOBj_ID_SIZE, GL_FLOAT, false, VER_SIZE_BYTES, GameOBj_ID_OFFSET);
+        glEnableVertexAttribArray(4);
     }
 
     private int[] generateIndices(){
@@ -211,6 +216,9 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
             //Load texture ID
             vertices[offset+8] = texID;
+
+            //Load GameObj ID
+            vertices[offset+9] = sprite.gameObject.getUID();
 
             offset += VERTEX_SIZE;
         }
