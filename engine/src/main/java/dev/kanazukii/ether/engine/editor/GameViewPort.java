@@ -11,12 +11,12 @@ import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.internal.ImGuiWindow;
 
-public class GameViewWindow {
+public class GameViewPort {
 
     // TODO: Should be seperated from the engine
-    private static float leftX, rightX, topY, botY;
+    private float leftX, rightX, topY, botY;
     
-    public static void ImGUI(){
+    public void ImGUI(){
         ImGui.begin("Scene Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
 
         ImVec2 windowSize = getFitSizeViewPort();
@@ -59,7 +59,7 @@ public class GameViewWindow {
 
         return new ImVec2(aspectWidth, aspectHeight);
     }
-    public static ImVec2 getCenteredPosViewPort(ImVec2 aspectSize){
+    public ImVec2 getCenteredPosViewPort(ImVec2 aspectSize){
         ImVec2 windowSize = new ImVec2();
         ImGui.getContentRegionAvail(windowSize);
         windowSize.x -= ImGui.getScrollX();
@@ -71,7 +71,7 @@ public class GameViewWindow {
         return new ImVec2(viewPortX + ImGui.getCursorPosX(), viewPortY + ImGui.getCursorPosY());
     }
 
-    public static boolean getWantCaptureMouse(){
+    public boolean getWantCaptureMouse(){
         return MouseListener.getX() >= leftX && MouseListener.getX() <= rightX &&
             MouseListener.getY() >= topY && MouseListener.getY() <= botY;
     }

@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.w3c.dom.Text;
 
@@ -29,7 +30,6 @@ public abstract class Scene {
     protected Camera camera;
     private boolean running = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
-    protected GameObject activeGameObject = null;
     protected boolean sceneLoaded = false;
 
     public Scene(){
@@ -65,16 +65,15 @@ public abstract class Scene {
         }
     }
 
-    public Camera getCamera(){
-        return camera;
+    public GameObject getGameObjectByUID(int UID){
+        Optional<GameObject> retrieve = this.gameObjects.stream()
+                                .filter(gameObject -> gameObject.getUID() == UID)
+                                .findFirst();
+        return retrieve.orElse(null);
     }
 
-    public void sceneImGUI(){
-        if(activeGameObject != null){
-            ImGui.begin("Inspector: " + activeGameObject.getName());
-            activeGameObject.ImGUI();
-            ImGui.end();
-        }
+    public Camera getCamera(){
+        return camera;
     }
 
     public void ImGUI(){

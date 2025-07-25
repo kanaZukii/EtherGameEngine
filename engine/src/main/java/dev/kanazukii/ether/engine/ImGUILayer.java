@@ -7,7 +7,9 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
-import dev.kanazukii.ether.engine.editor.GameViewWindow;
+import dev.kanazukii.ether.engine.editor.GameViewPort;
+import dev.kanazukii.ether.engine.editor.InspectorWindow;
+import dev.kanazukii.ether.engine.renderer.PickingTexture;
 import dev.kanazukii.ether.engine.scenes.Scene;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
@@ -30,6 +32,8 @@ public class ImGUILayer {
 
     private String glslVersion = "#version 330 core";
     private long glfwWindowPtr;
+    private GameViewPort gameView;
+    private InspectorWindow inspector;
 
      // Mouse cursors provided by GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
@@ -37,8 +41,10 @@ public class ImGUILayer {
     // LWJGL3 renderer (SHOULD be initialized)
     private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
 
-    public ImGUILayer(long glfwWindow){
+    public ImGUILayer(long glfwWindow, PickingTexture pickingTexture){
         this.glfwWindowPtr = glfwWindow;
+        this.gameView = new GameViewPort();
+        this.inspector = new InspectorWindow(pickingTexture);
     }
 
     // Initialize Dear ImGui.
@@ -126,7 +132,7 @@ public class ImGUILayer {
             }
 
             // If imGUI not listening to mouse inputs pass it to our MouseListener
-            if (!io.getWantCaptureMouse() || GameViewWindow.getWantCaptureMouse()) {
+            if (!io.getWantCaptureMouse() || gameView.getWantCaptureMouse()) {
                 MouseListener.mouseButtonCallback(w, button, action, mods);
             }
         });
@@ -247,8 +253,9 @@ public class ImGUILayer {
         ImGui.newFrame();
         setDockSpace();
         scene.ImGUI();
-        scene.sceneImGUI();
-        GameViewWindow.ImGUI();
+        gameView.ImGUI();
+        inspector.ImGUI();
+        inspector.update(deltaTime, scene);
         ImGui.showDemoWindow();
         ImGui.end();
         ImGui.render();

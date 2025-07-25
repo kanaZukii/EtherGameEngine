@@ -215,15 +215,15 @@ public class Window {
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-        // IMGUI
-        imGUILayer = new ImGUILayer(glfwWindow);
-        imGUILayer.initImGui();
-
         // Binded to the screen size TODO: Make it dynamic, match it to user's screen size
         framebuffer = new FrameBuffer(1920, 1080);
         glViewport(0, 0, 1920, 1080);
 
         pickingTex = new PickingTexture(1920, 1080); 
+
+        // IMGUI
+        imGUILayer = new ImGUILayer(glfwWindow, pickingTex);
+        imGUILayer.initImGui();
 
         //GL Info
         System.out.println("OpenGL Version: " + glGetString(GL_VERSION));
@@ -260,13 +260,6 @@ public class Window {
 
             Renderer.bindShader(pickingShader);
             currentScene.render();
-
-            if(MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)){
-                int x = (int)MouseListener.getSreenX();
-                int y = (int)MouseListener.getSreenY();
-                System.out.println(pickingTex.readPixel(x, y));
-            }
-
 
             pickingTex.disableWriting();
             glEnable(GL_BLEND);

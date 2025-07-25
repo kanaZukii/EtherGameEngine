@@ -50,7 +50,6 @@ public class LevelEditorScene extends Scene {
         test_sheet = AssetPool.getSpriteSheet("assets/textures/skeleton_spritesheet.png");
         
         if(sceneLoaded){
-            this.activeGameObject = gameObjects.get(1);
             return;
         }
 
@@ -66,8 +65,6 @@ public class LevelEditorScene extends Scene {
         skeleton.addComponent(skeletonSprite);
         skeleton.addComponent(new RigidBody());
         addGameObject(skeleton);
-
-        this.activeGameObject = gameObjects.get(1);
 
     }
     
