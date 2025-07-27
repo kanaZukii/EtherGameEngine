@@ -13,6 +13,7 @@ import com.google.gson.internal.GsonBuildConfig;
 import dev.kanazukii.ether.engine.Camera;
 import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.Prefabs;
+import dev.kanazukii.ether.engine.components.EditorCamera;
 import dev.kanazukii.ether.engine.components.GridLines;
 import dev.kanazukii.ether.engine.components.MouseControls;
 import dev.kanazukii.ether.engine.components.RigidBody;
@@ -39,13 +40,14 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
+        camera = new Camera(new Vector2f());
 
+        Editor_Components.addComponent(new EditorCamera(camera));
         Editor_Components.addComponent(new MouseControls());
         Editor_Components.addComponent(new GridLines());
 
         loadAssets();
         
-        camera = new Camera(new Vector2f());
         tile_set = AssetPool.getSpriteSheet("assets/textures/tilemap.png");
         test_sheet = AssetPool.getSpriteSheet("assets/textures/skeleton_spritesheet.png");
         
