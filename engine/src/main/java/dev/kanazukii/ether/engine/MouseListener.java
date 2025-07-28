@@ -17,6 +17,7 @@ public class MouseListener{
     private double xPos, yPos, prevX, prevY;
 
     private boolean mouseButtonPressed[] = new boolean[3];
+    private boolean buttonHold;
     private boolean mouseDragging;
 
     private Vector2f gameViewPortPosition = new Vector2f(0.0f, 0.0f);
@@ -46,7 +47,7 @@ public class MouseListener{
         get().xPos = xPos;
         get().yPos = yPos;
 
-        get().mouseDragging = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
+        get().buttonHold = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
     }
 
     public static void mouseButtonCallback(long window, int button, int action, int mods)
@@ -61,7 +62,7 @@ public class MouseListener{
             if(button < get().mouseButtonPressed.length)
             {
                 get().mouseButtonPressed[button] = false;
-                get().mouseDragging = false;
+                get().buttonHold = false;
             }
         }
     }
@@ -112,11 +113,11 @@ public class MouseListener{
 
     public static float getOrthoX(){
         float currentX = getX() - get().gameViewPortPosition.x;
-        currentX = (currentX / (float)get().gameViewPortSize.x) * 2.0f - 1.0f;
+        currentX = (currentX / get().gameViewPortSize.x) * 2.0f - 1.0f;
         Vector4f temp = new Vector4f(currentX,0,0,1);
         Camera camera = Window.getScene().getCamera();
         Matrix4f inverseView = new Matrix4f();
-        camera.getInverseProjection().mul(camera.getInverseView(), inverseView);
+        camera.getInverseView().mul(camera.getInverseProjection(), inverseView);
         temp.mul(inverseView);
         currentX = temp.x;
         
@@ -125,11 +126,11 @@ public class MouseListener{
 
     public static float getOrthoY(){
         float currentY = getY() - get().gameViewPortPosition.y;
-        currentY = -((currentY/(float)get().gameViewPortSize.y) * 2.0f - 1.0f);
+        currentY = -((currentY/ get().gameViewPortSize.y) * 2.0f - 1.0f);
         Vector4f temp = new Vector4f(0,currentY,0,1);
         Camera camera = Window.getScene().getCamera();
         Matrix4f inverseView = new Matrix4f();
-        camera.getInverseProjection().mul(camera.getInverseView(), inverseView);
+        camera.getInverseView().mul(camera.getInverseProjection(), inverseView);
         temp.mul(inverseView);
         currentY = temp.y;
 
@@ -152,8 +153,8 @@ public class MouseListener{
         return (float)get().scrollY;
     }
 
-    public static boolean isDragging(){
-        return get().mouseDragging;
+    public static boolean isButtonHeld(){
+        return get().buttonHold;
     }
 
     public static boolean mouseButtonDown(int button){

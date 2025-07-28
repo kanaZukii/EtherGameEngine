@@ -140,6 +140,10 @@ public class ImGUILayer {
         glfwSetScrollCallback(glfwWindowPtr, (w, xOffset, yOffset) -> {
             io.setMouseWheelH(io.getMouseWheelH() + (float) xOffset);
             io.setMouseWheel(io.getMouseWheel() + (float) yOffset);
+
+            if (gameView.getWantCaptureMouse()) {
+                MouseListener.mouseScrollCallback(w, xOffset, yOffset);
+            }
         });
 
         io.setSetClipboardTextFn(new ImStrConsumer() {
