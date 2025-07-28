@@ -19,6 +19,17 @@ public class Prefabs {
         return spriteObj;
     }
 
+    public static GameObject createSpriteObj(Sprite sprite, float width, float height, int zIndex){
+        GameObject spriteObj = new GameObject("SpriteObj_Generated",
+                                                new Transform(new Vector2f(0,0), new Vector2f(width,height)),
+                                                zIndex);
+        SpriteRenderer spriterenderer = new SpriteRenderer();
+        spriterenderer.setSprite(sprite);
+        spriteObj.addComponent(spriterenderer);
+
+        return spriteObj;
+    }
+
     public static GameObject duplicateSpriteObj(GameObject spriteObj){
         GameObject newSpriteObj = new GameObject("SpriteObj_GeneratedDup",
                                                 spriteObj.transform.copy(),

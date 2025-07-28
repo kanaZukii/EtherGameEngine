@@ -23,6 +23,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -186,13 +187,22 @@ public class RenderBatch implements Comparable<RenderBatch> {
         // Add vertices with the properties
         float xStep = 1.0f;
         float yStep = 1.0f;
+        
+        float rotation = sprite.gameObject.transform.rotation;
+        Matrix4f transformMatrix = new Matrix4f().identity();
+        if(rotation != 0.0f){
+            transformMatrix.translate(sprite.gameObject.transform.position.x, sprite.gameObject.transform.position.y, 0.0f);
+            transformMatrix.rotate((float)Math.toRadians(rotation), 0,0, 1);
+            transformMatrix.scale(sprite.gameObject.transform.scale.x, sprite.gameObject.transform.scale.y, 1);
+        }
+
         for(int i = 0; i < 4; i++){
             if(i == 1){
                 yStep = 0.0f;
             } else if (i == 2){
                 xStep = 0.0f;
             } else if (i == 3){
-                yStep= 1.0f;
+                yStep = 1.0f;
             }
 
             // Load position
@@ -201,8 +211,13 @@ public class RenderBatch implements Comparable<RenderBatch> {
             float scaleX = sprite.gameObject.transform.scale.x;
             float scaleY = sprite.gameObject.transform.scale.y;
 
-            vertices[offset] = posX + (xStep * scaleX);
-            vertices[offset+1] = posY + (yStep * scaleY);
+            Vector4f currentPosition = new Vector4f(posX + (xStep * scaleX),  posY + (yStep * scaleY), 0, 1);
+            if(rotation != 0.0f){
+                currentPosition = new Vector4f(xStep, yStep, 0,1).mul(transformMatrix);
+            }
+
+            vertices[offset] = currentPosition.x;
+            vertices[offset+1] = currentPosition.y;
 
             // Load Color
             vertices[offset+2] = color.x;
