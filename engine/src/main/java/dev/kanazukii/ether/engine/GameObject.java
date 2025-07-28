@@ -10,6 +10,7 @@ public class GameObject {
     
     private static int ID_Count = 0;
     private int uID = -1;
+    private boolean serialize = true;
 
     private String name;
     private int zIndex;
@@ -41,6 +42,14 @@ public class GameObject {
 
     public String getName(){
         return name;
+    }
+
+    public void setSerialize(boolean value){
+        serialize = value;
+    }
+
+    public boolean doSerialize(){
+        return serialize;
     }
 
     // Retrieves a component based on the passed class use object.class

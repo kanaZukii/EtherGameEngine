@@ -89,7 +89,13 @@ public abstract class Scene {
                         .create();
         try {
             FileWriter writer = new FileWriter("gamescene.txt");
-            writer.write(gson.toJson(this.gameObjects));
+            List<GameObject> gameObjToSerialize = new ArrayList<>();
+            for (GameObject gameObject : this.gameObjects) {
+                if(gameObject.doSerialize()){
+                    gameObjToSerialize.add(gameObject);
+                }
+            }
+            writer.write(gson.toJson(gameObjToSerialize));
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();

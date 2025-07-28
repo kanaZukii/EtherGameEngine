@@ -18,9 +18,15 @@ public class MouseControls extends Component {
         Window.getScene().addGameObject(gameObject);
     }
 
+    // Allow the user to deselect or discard the current object the mouse is holding
+    public void dropObject(){
+        
+    }
+
     public void placeObject(){
         System.out.println("Placed: " + heldObject.getName());
-        pickUpObject(Prefabs.duplicateSpriteObj(heldObject));
+        heldObject = null;
+        //pickUpObject(Prefabs.duplicateSpriteObj(heldObject));
     }
 
     private float placeCD = 0.0f;
