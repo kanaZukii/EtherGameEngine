@@ -301,4 +301,8 @@ public class ImGUILayer {
         imGuiGl3.shutdown();
         ImGui.destroyContext();
     }
+
+    public InspectorWindow getInspector(){
+        return inspector;
+    }
 }

@@ -77,13 +77,13 @@ public class Window {
     public static float FPS = 0.0f;
     public static int targetFPS = 0;
 
-    private ImGUILayer imGUILayer;
+    private static ImGUILayer imGUILayer;
 
     private Window()
     {
         this.width = 1920;
         this.height = 1080;
-        this.title = "Hello World!";
+        this.title = "Ether Game Editor";
 
         this.BG_r = 0.3f;
         this.BG_g = 0.3f;
@@ -127,6 +127,10 @@ public class Window {
 
     public static void setWidth(int newWidth){
         get().width = newWidth;
+    }
+
+    public static ImGUILayer getImGUILayer(){
+        return imGUILayer;
     }
 
     // Create and start showing a window

@@ -13,6 +13,8 @@ public class InspectorWindow {
     private GameObject selectedGameObject = null;
     private PickingTexture pickingTex;
 
+    private float debounceTime = 0.2f;
+
     public InspectorWindow(PickingTexture pickingTex){
         this.pickingTex = pickingTex;
     }
@@ -26,11 +28,19 @@ public class InspectorWindow {
     }
 
     public void update(float deltaTime, Scene currentScene){
-        if(MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)){
+        debounceTime -= deltaTime;
+
+        if(MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT) && debounceTime < 0){
                 int x = (int)MouseListener.getSreenX();
                 int y = (int)MouseListener.getSreenY();
                 int uid = pickingTex.readPixel(x, y);
                 selectedGameObject = currentScene.getGameObjectByUID(uid);
+                debounceTime = 0.2f;
         }
     }
+
+    public GameObject getSelectedGameObject(){
+        return selectedGameObject;
+    }
+
 }

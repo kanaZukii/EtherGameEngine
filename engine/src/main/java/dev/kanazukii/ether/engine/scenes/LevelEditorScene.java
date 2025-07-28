@@ -13,6 +13,7 @@ import com.google.gson.internal.GsonBuildConfig;
 import dev.kanazukii.ether.engine.Camera;
 import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.Prefabs;
+import dev.kanazukii.ether.engine.Window;
 import dev.kanazukii.ether.engine.components.EditorCamera;
 import dev.kanazukii.ether.engine.components.GridLines;
 import dev.kanazukii.ether.engine.components.MouseControls;
@@ -21,6 +22,7 @@ import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
 import dev.kanazukii.ether.engine.components.Transform;
+import dev.kanazukii.ether.engine.components.TranslateGizmo;
 import dev.kanazukii.ether.engine.renderer.DebugRenderer;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 import dev.kanazukii.ether.engine.utils.Configs;
@@ -40,14 +42,20 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
+
         camera = new Camera(new Vector2f());
+
+        loadAssets();
+
+        Spritesheet gizmoSprite = AssetPool.getSpriteSheet("assets/editor/translateGizmo_sprite.png");
 
         Editor_Components.addComponent(new EditorCamera(camera));
         Editor_Components.addComponent(new MouseControls());
         Editor_Components.addComponent(new GridLines());
-
-        loadAssets();
+        Editor_Components.addComponent(new TranslateGizmo(gizmoSprite.getSprite(0), Window.get().getImGUILayer().getInspector()));
         
+        Editor_Components.start();
+
         tile_set = AssetPool.getSpriteSheet("assets/textures/tilemap.png");
         test_sheet = AssetPool.getSpriteSheet("assets/textures/skeleton_spritesheet.png");
         
@@ -74,6 +82,10 @@ public class LevelEditorScene extends Scene {
     private void loadAssets(){
         AssetPool.getShader("assets/shaders/default.glsl");
 
+        AssetPool.addSpriteSheet("assets/editor/translateGizmo_sprite.png",
+                                new Spritesheet(AssetPool.getTexture("assets/editor/translateGizmo_sprite.png"),
+                                256, 256, 1, 0));
+
         AssetPool.addSpriteSheet("assets/textures/tilemap.png", 
                                 new Spritesheet(AssetPool.getTexture("assets/textures/tilemap.png"), 
                                     16, 16, 10, 0));
@@ -82,10 +94,6 @@ public class LevelEditorScene extends Scene {
                                 new Spritesheet(AssetPool.getTexture("assets/textures/skeleton_spritesheet.png"), 
                                     16, 16, 8, 0));
     }
-
-    private float tick = 0.1f;
-    private float current =  0.0f;
-    private int spriteIndex = 4;
 
     @Override
     public void update(float deltaTime) {
@@ -97,20 +105,19 @@ public class LevelEditorScene extends Scene {
             gameObject.update(deltaTime);
         }
 
-        current += deltaTime;
-        if(current >= tick){
-            current = 0;
-            if(spriteIndex >= 8){
-                spriteIndex = 4;
-            }  
-            gameObjects.get(1).getComponent(SpriteRenderer.class).setSprite(test_sheet.getSprite(spriteIndex));
-            spriteIndex++;
-        }
-        
+    }
+
+    private void editorImGUI(){
+        ImGui.begin("Editor Components");
+        Editor_Components.ImGUI();
+        ImGui.end();
+
     }
 
     @Override
     public void ImGUI(){
+        editorImGUI();
+
         ImGui.begin("Tile Set");
 
         ImVec2 windowPos = new ImVec2();
