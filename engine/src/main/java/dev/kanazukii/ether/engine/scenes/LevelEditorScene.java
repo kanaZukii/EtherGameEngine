@@ -90,7 +90,7 @@ public class LevelEditorScene extends Scene {
     @Override
     public void update(float deltaTime) {
         //System.out.println("FPS: " + String.valueOf(Window.FPS));
-        
+        camera.adjustProjection();
         Editor_Components.update(deltaTime);
 
         for (GameObject gameObject: gameObjects){

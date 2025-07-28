@@ -11,6 +11,7 @@ public class Camera {
 
     // Varibales in controlling the camera in 2d plane (The vector for the bottom left corner of the camera)
     private Vector2f position;
+    private float zoom = 1.0f;
 
     private float worldUnits = 32.0f;
     private float width = 40.0f;
@@ -55,7 +56,7 @@ public class Camera {
     // Camera view area base on game tile size (in pixels) and the farthest z index
     public void adjustProjection(){
         projectionMatrix.identity();
-        projectionMatrix.ortho(0.0f, proejectionSize.x, 0.0f, proejectionSize.y, 0, farZ);
+        projectionMatrix.ortho(0.0f, proejectionSize.x * zoom, 0.0f, proejectionSize.y * zoom, 0, farZ);
         projectionMatrix.invert(inverseProjection);
     }
 
@@ -65,6 +66,18 @@ public class Camera {
 
     public Matrix4f getInverseView(){
         return inverseView;
+    }
+
+    public float getZoom(){
+        return zoom;
+    }
+
+    public void setZoom(float zoom){
+        this.zoom = zoom;
+    }
+
+    public void addZoom(float value){
+        zoom += value;
     }
 
 }
