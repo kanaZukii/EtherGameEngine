@@ -1,7 +1,5 @@
 package dev.kanazukii.ether.engine.components;
 
-import java.util.Vector;
-
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 

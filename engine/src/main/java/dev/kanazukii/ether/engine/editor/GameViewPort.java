@@ -6,11 +6,7 @@ import dev.kanazukii.ether.engine.MouseListener;
 import dev.kanazukii.ether.engine.Window;
 import imgui.ImGui;
 import imgui.ImVec2;
-import imgui.ImVec4;
-import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiWindowFlags;
-import imgui.internal.ImGuiWindow;
-
 public class GameViewPort {
 
     // TODO: Should be seperated from the engine

@@ -2,7 +2,6 @@ package dev.kanazukii.ether.engine.components;
 
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-import org.w3c.dom.Text;
 
 import imgui.ImGui;
 

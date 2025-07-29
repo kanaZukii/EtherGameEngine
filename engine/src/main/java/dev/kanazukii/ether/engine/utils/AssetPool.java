@@ -1,14 +1,10 @@
 package dev.kanazukii.ether.engine.utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.Spritesheet;
 import dev.kanazukii.ether.engine.components.Texture;
 import dev.kanazukii.ether.engine.renderer.Shader;

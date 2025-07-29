@@ -2,13 +2,10 @@ package dev.kanazukii.ether.engine.components;
 
 import java.lang.reflect.Type;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-
 import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class TextureDeserializer implements JsonDeserializer<Texture>{

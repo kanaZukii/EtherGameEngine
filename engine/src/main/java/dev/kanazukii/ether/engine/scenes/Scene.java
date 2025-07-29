@@ -1,6 +1,5 @@
 package dev.kanazukii.ether.engine.scenes;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,8 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import org.w3c.dom.Text;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,7 +19,6 @@ import dev.kanazukii.ether.engine.components.ComponentDeserializer;
 import dev.kanazukii.ether.engine.components.Texture;
 import dev.kanazukii.ether.engine.components.TextureDeserializer;
 import dev.kanazukii.ether.engine.renderer.Renderer;
-import imgui.ImGui;
 
 public abstract class Scene {
     

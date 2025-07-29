@@ -2,18 +2,12 @@ package dev.kanazukii.ether.engine;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import org.lwjgl.glfw.GLFWCharCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
-import org.lwjgl.glfw.GLFWScrollCallback;
-
 import dev.kanazukii.ether.engine.editor.GameViewPort;
 import dev.kanazukii.ether.engine.editor.InspectorWindow;
 import dev.kanazukii.ether.engine.renderer.PickingTexture;
 import dev.kanazukii.ether.engine.scenes.Scene;
 import imgui.ImFontAtlas;
 import imgui.ImFontConfig;
-import imgui.ImFontGlyphRangesBuilder;
 import imgui.ImGui;
 import imgui.ImGuiIO;
 import imgui.callback.ImStrConsumer;

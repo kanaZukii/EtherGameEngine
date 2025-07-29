@@ -1,11 +1,9 @@
 package dev.kanazukii.ether.engine.components;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.MouseListener;
-import dev.kanazukii.ether.engine.Prefabs;
 import dev.kanazukii.ether.engine.Window;
 import dev.kanazukii.ether.engine.utils.Configs;
 

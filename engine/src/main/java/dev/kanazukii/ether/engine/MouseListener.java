@@ -3,12 +3,9 @@ package dev.kanazukii.ether.engine;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
-import java.util.Vector;
-
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-import org.joml.Vector4i;
 
 public class MouseListener{
 
