@@ -14,10 +14,10 @@ public class MouseListener{
 
     private static MouseListener instance;
     private double scrollX, scrollY;
-    private double xPos, yPos, prevX, prevY;
+    private double xPos, yPos, prevX, prevY, worldX, worldY, prevWorldX, prevWorldY;
 
     private boolean mouseButtonPressed[] = new boolean[3];
-    private boolean buttonHold;
+    private int mouseButtonDown;
     private boolean mouseDragging;
 
     private Vector2f gameViewPortPosition = new Vector2f(0.0f, 0.0f);
@@ -41,28 +41,38 @@ public class MouseListener{
     }
 
     public static void mousePosCallback(long window, double xPos, double yPos){
+        if(get().mouseButtonDown > 0) {
+            get().mouseDragging = true;
+        }
+
         get().prevX = get().xPos;
         get().prevY = get().yPos;
+        get().prevWorldX = get().worldX;
+        get().prevWorldY = get().worldY;
 
         get().xPos = xPos;
         get().yPos = yPos;
 
-        get().buttonHold = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
+        calcOrthoX();
+        calcOrthoY();
     }
 
     public static void mouseButtonCallback(long window, int button, int action, int mods)
     {
         if(action == GLFW_PRESS){
+            get().mouseButtonDown++;
+
             if(button < get().mouseButtonPressed.length)
             {
                 get().mouseButtonPressed[button] = true;
             }
         } else if (action == GLFW_RELEASE) 
         {
+            get().mouseButtonDown--;
             if(button < get().mouseButtonPressed.length)
             {
                 get().mouseButtonPressed[button] = false;
-                get().buttonHold = false;
+                get().mouseDragging = false;
             }
         }
     }
@@ -79,6 +89,8 @@ public class MouseListener{
         get().scrollY = 0;
         get().prevX = get().xPos;
         get().prevY = get().yPos;
+        get().prevWorldX = get().worldX;
+        get().prevWorldY = get().worldY;
     }
 
     public static float getX(){
@@ -111,7 +123,7 @@ public class MouseListener{
         return currentY;
     }
 
-    public static float getOrthoX(){
+    private static void calcOrthoX(){
         float currentX = getX() - get().gameViewPortPosition.x;
         currentX = (currentX / get().gameViewPortSize.x) * 2.0f - 1.0f;
         Vector4f temp = new Vector4f(currentX,0,0,1);
@@ -119,12 +131,11 @@ public class MouseListener{
         Matrix4f inverseView = new Matrix4f();
         camera.getInverseView().mul(camera.getInverseProjection(), inverseView);
         temp.mul(inverseView);
-        currentX = temp.x;
-        
-        return currentX;
+
+        get().worldX = temp.x;
     }
 
-    public static float getOrthoY(){
+    private static void calcOrthoY(){
         float currentY = getY() - get().gameViewPortPosition.y;
         currentY = -((currentY/ get().gameViewPortSize.y) * 2.0f - 1.0f);
         Vector4f temp = new Vector4f(0,currentY,0,1);
@@ -132,9 +143,16 @@ public class MouseListener{
         Matrix4f inverseView = new Matrix4f();
         camera.getInverseView().mul(camera.getInverseProjection(), inverseView);
         temp.mul(inverseView);
-        currentY = temp.y;
+        
+        get().worldY = temp.y;
+    }
 
-        return currentY;
+    public static float getOrthoX(){
+        return (float)get().worldX;
+    }
+
+    public static float getOrthoY(){
+        return (float)get().worldY;
     }
 
     public static float getDx(){
@@ -145,6 +163,14 @@ public class MouseListener{
         return (float)(get().prevY - get().yPos);
     }
 
+    public static float getWorldDx(){
+        return (float)(get().prevWorldX - get().worldX);
+    }
+
+    public static float getWorldDy(){
+        return (float)(get().prevWorldY - get().worldY);
+    }
+
     public static float getScrollX(){
         return (float)get().scrollX;
     }
@@ -153,8 +179,8 @@ public class MouseListener{
         return (float)get().scrollY;
     }
 
-    public static boolean isButtonHeld(){
-        return get().buttonHold;
+    public static boolean isDragging(){
+        return get().mouseDragging;
     }
 
     public static boolean mouseButtonDown(int button){

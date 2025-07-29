@@ -28,7 +28,7 @@ public class EditorCamera extends Component {
 
     // For controlling camera with mouse and zooming
     private Vector2f clickOrigin;
-    private float dragDebounce = 0.05f; // TODO: CREATE A CHECK DRAGGING METHOD IN MOUSELISTENER
+    private float dragDebounce = 0.05f;
     private float dragSensitivity = 25.0f;
     private float scrollSensitivity = 0.1f;
 

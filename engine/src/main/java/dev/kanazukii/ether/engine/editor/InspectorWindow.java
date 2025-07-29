@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.MouseListener;
+import dev.kanazukii.ether.engine.components.Uneditable;
 import dev.kanazukii.ether.engine.renderer.PickingTexture;
 import dev.kanazukii.ether.engine.scenes.Scene;
 import imgui.ImGui;
@@ -12,6 +13,8 @@ public class InspectorWindow {
 
     private GameObject selectedGameObject = null;
     private PickingTexture pickingTex;
+
+    private boolean disableSelection = false;
 
     private float debounceTime = 0.2f;
 
@@ -34,9 +37,19 @@ public class InspectorWindow {
                 int x = (int)MouseListener.getSreenX();
                 int y = (int)MouseListener.getSreenY();
                 int uid = pickingTex.readPixel(x, y);
-                selectedGameObject = currentScene.getGameObjectByUID(uid);
                 debounceTime = 0.2f;
+                if(currentScene.getGameObjectByUID(uid) !=  null){
+                    if(currentScene.getGameObjectByUID(uid).getComponent(Uneditable.class) !=  null) return;
+                }
+                
+                if(!disableSelection){
+                    selectedGameObject = currentScene.getGameObjectByUID(uid);
+                }
         }
+    }
+
+    public void canSelectObject(boolean value){
+        disableSelection = !value;
     }
 
     public GameObject getSelectedGameObject(){
