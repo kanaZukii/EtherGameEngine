@@ -1,20 +1,13 @@
 package dev.kanazukii.ether.engine.scenes;
 
-import java.io.ObjectInputFilter.Config;
-
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.internal.GsonBuildConfig;
 
 import dev.kanazukii.ether.engine.Camera;
 import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.Prefabs;
-import dev.kanazukii.ether.engine.Window;
 import dev.kanazukii.ether.engine.components.EditorCamera;
+import dev.kanazukii.ether.engine.components.GizmoTools;
 import dev.kanazukii.ether.engine.components.GridLines;
 import dev.kanazukii.ether.engine.components.MouseControls;
 import dev.kanazukii.ether.engine.components.RigidBody;
@@ -22,8 +15,6 @@ import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
 import dev.kanazukii.ether.engine.components.Transform;
-import dev.kanazukii.ether.engine.components.TranslateGizmo;
-import dev.kanazukii.ether.engine.renderer.DebugRenderer;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 import dev.kanazukii.ether.engine.utils.Configs;
 import imgui.ImGui;
@@ -47,13 +38,11 @@ public class LevelEditorScene extends Scene {
 
         loadAssets();
 
-        Spritesheet gizmoSprite = AssetPool.getSpriteSheet("assets/editor/translateGizmo_sprite.png");
-
         Editor_Components.addComponent(new EditorCamera(camera));
         Editor_Components.addComponent(new MouseControls());
         Editor_Components.addComponent(new GridLines());
-        Editor_Components.addComponent(new TranslateGizmo(gizmoSprite.getSprite(0), Window.get().getImGUILayer().getInspector()));
-        
+        Editor_Components.addComponent(new GizmoTools(AssetPool.getSpriteSheet("assets/editor/gizmo_sprites.png")));
+
         Editor_Components.start();
 
         tile_set = AssetPool.getSpriteSheet("assets/textures/tilemap.png");
@@ -82,9 +71,9 @@ public class LevelEditorScene extends Scene {
     private void loadAssets(){
         AssetPool.getShader("assets/shaders/default.glsl");
 
-        AssetPool.addSpriteSheet("assets/editor/translateGizmo_sprite.png",
-                                new Spritesheet(AssetPool.getTexture("assets/editor/translateGizmo_sprite.png"),
-                                256, 256, 1, 0));
+        AssetPool.addSpriteSheet("assets/editor/gizmo_sprites.png",
+                                new Spritesheet(AssetPool.getTexture("assets/editor/gizmo_sprites.png"),
+                                128, 256, 2, 0));
 
         AssetPool.addSpriteSheet("assets/textures/tilemap.png", 
                                 new Spritesheet(AssetPool.getTexture("assets/textures/tilemap.png"), 
