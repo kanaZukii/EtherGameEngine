@@ -1,7 +1,6 @@
 package dev.kanazukii.ether.engine.scenes;
 
 import org.joml.Vector2f;
-import org.joml.Vector4f;
 
 import dev.kanazukii.ether.engine.Camera;
 import dev.kanazukii.ether.engine.GameObject;
@@ -10,11 +9,8 @@ import dev.kanazukii.ether.engine.components.EditorCamera;
 import dev.kanazukii.ether.engine.components.GizmoTools;
 import dev.kanazukii.ether.engine.components.GridLines;
 import dev.kanazukii.ether.engine.components.MouseControls;
-import dev.kanazukii.ether.engine.components.RigidBody;
 import dev.kanazukii.ether.engine.components.Sprite;
-import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
-import dev.kanazukii.ether.engine.components.Transform;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 import dev.kanazukii.ether.engine.utils.Configs;
 import imgui.ImGui;
@@ -28,7 +24,6 @@ public class LevelEditorScene extends Scene {
 
 
     private GameObject Editor_Components = new GameObject("EDITOR");
-    private Spritesheet test_sheet;
     private Spritesheet tile_set;
 
     @Override
@@ -46,24 +41,10 @@ public class LevelEditorScene extends Scene {
         Editor_Components.start();
 
         tile_set = AssetPool.getSpriteSheet("assets/textures/tilemap.png");
-        test_sheet = AssetPool.getSpriteSheet("assets/textures/skeleton_spritesheet.png");
         
         if(sceneLoaded){
             return;
         }
-
-        GameObject testSquare = new GameObject("Square", new Transform(new Vector2f(100, 100), new Vector2f(250, 250)),0);
-        SpriteRenderer testSpriteRenderer = new SpriteRenderer();
-        testSpriteRenderer.setColor(new Vector4f(1,0,0,1));
-        testSquare.addComponent(testSpriteRenderer);
-        addGameObject(testSquare);
-
-        SpriteRenderer skeletonSprite = new SpriteRenderer();
-        skeletonSprite.setSprite(test_sheet.getSprite(0));
-        GameObject skeleton = new GameObject("Skeleton", new Transform(new Vector2f(350, 100), new Vector2f(64, 64)), 1);
-        skeleton.addComponent(skeletonSprite);
-        skeleton.addComponent(new RigidBody());
-        addGameObject(skeleton);
 
     }
     

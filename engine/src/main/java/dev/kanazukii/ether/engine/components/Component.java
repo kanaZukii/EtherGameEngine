@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import dev.kanazukii.ether.engine.GameObject;
+import dev.kanazukii.ether.engine.editor.EtherImGUi;
 import imgui.ImGui;
 
 public abstract class Component {
@@ -40,12 +41,10 @@ public abstract class Component {
 
                 if(type == int.class){
                     int val = (int)value;
-                    int[] imInt = {val};
-                    if(ImGui.dragInt(name, imInt)){ field.set(this, imInt[0]); }
+                    field.set(this, EtherImGUi.dragIntControls(name, val));
                 } else if (type == float.class){
                     float val = (float)value;
-                    float[] imFloat = {val};
-                    if(ImGui.dragFloat(name, imFloat)){ field.set(this, imFloat[0]); }
+                    field.set(this, EtherImGUi.dragFloatControls(name, val));
                 } else if (type == boolean.class){
                     boolean val = (boolean)value;
                     if(ImGui.checkbox(name, val)){ field.set(this, !val); }
@@ -55,8 +54,7 @@ public abstract class Component {
                     if(ImGui.dragFloat3(name, imVec)){ val.set(imVec[0],imVec[1],imVec[2]); }
                 } else if (type == Vector2f.class){
                     Vector2f val = (Vector2f)value;
-                    float[] imVec = {val.x, val.y};
-                    if(ImGui.dragFloat2(name, imVec)){ val.set(imVec[0],imVec[1]);}
+                    EtherImGUi.dragVec2Controls(name, val);
                 }else if (type == Vector4f.class){
                     Vector4f val = (Vector4f)value;
                     float[] imVec = {val.x, val.y, val.z, val.w};

@@ -3,7 +3,7 @@ package dev.kanazukii.ether.engine.components;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-import imgui.ImGui;
+import dev.kanazukii.ether.engine.editor.EtherImGUi;
 
 public class SpriteRenderer extends Component{
     
@@ -73,9 +73,7 @@ public class SpriteRenderer extends Component{
 
     @Override
     public void ImGUI(){
-        float[] colors = {this.color.x, this.color.y, this.color.z, this.color.w}; 
-        if(ImGui.colorPicker4("Color Picker", colors)){
-            this.color.set(colors[0], colors[1], colors[2], colors[3]);
+        if(EtherImGUi.colorPicker4f("Color Picker", color)){
             isDirty = true;
         };
 

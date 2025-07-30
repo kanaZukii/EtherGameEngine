@@ -57,6 +57,8 @@ public class ImGUILayer {
         io.setBackendFlags(ImGuiBackendFlags.HasMouseCursors); // Mouse cursors to display while resizing windows etc.
         io.setBackendPlatformName("imgui_java_impl_glfw");
 
+        ImGui.styleColorsClassic();
+
         // ------------------------------------------------------------
         // Mapping and Input callbacks
         initInputs(io);
