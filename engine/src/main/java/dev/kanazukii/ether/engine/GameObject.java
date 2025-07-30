@@ -5,6 +5,7 @@ import java.util.List;
 
 import dev.kanazukii.ether.engine.components.Component;
 import dev.kanazukii.ether.engine.components.Transform;
+import imgui.ImGui;
 
 public class GameObject {
     
@@ -13,28 +14,15 @@ public class GameObject {
     private boolean serialize = true;
 
     private String name;
-    private int zIndex;
     // List of all components (Sprite render and etc.) of the object
     private List<Component> components;
-    public Transform transform;
+    public transient Transform transform;
 
-    // Constructor of a game object without the transform
+
+    // Constructor for game object with a transform (Scale and position)
     public GameObject(String name){
         this.name = name;
         this.components = new ArrayList<>();
-        this.transform = new Transform();
-        this.zIndex = 0;
-
-        // TODO: Fix uID assignment when loading serialized saved scenes
-        generateID();
-    }
-
-    // Constructor for game object with a transform (Scale and position)
-    public GameObject(String name, Transform transform, int zIndex){
-        this.name = name;
-        this.zIndex = zIndex;
-        this.components = new ArrayList<>();
-        this.transform = transform;
 
         // TODO: Fix uID assignment when loading serialized saved scenes
         generateID();
@@ -90,13 +78,9 @@ public class GameObject {
         component.gameObject = this;
     }
 
-    public int zIndex(){
-        return zIndex;
-    }
-
     public void ImGUI(){
         for (Component component : components) {
-            component.ImGUI();
+            if(ImGui.collapsingHeader(component.getClass().getSimpleName())) component.ImGUI();
         }
     }
 

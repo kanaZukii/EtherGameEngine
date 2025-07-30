@@ -18,6 +18,7 @@ import dev.kanazukii.ether.engine.components.Component;
 import dev.kanazukii.ether.engine.components.ComponentDeserializer;
 import dev.kanazukii.ether.engine.components.Texture;
 import dev.kanazukii.ether.engine.components.TextureDeserializer;
+import dev.kanazukii.ether.engine.components.Transform;
 import dev.kanazukii.ether.engine.renderer.Renderer;
 
 public abstract class Scene {
@@ -48,6 +49,13 @@ public abstract class Scene {
         }
 
         running = true;
+    }
+
+    public GameObject createGameObject(String name){
+        GameObject gameObj = new GameObject(name);
+        gameObj.addComponent(new Transform());
+        gameObj.transform = gameObj.getComponent(Transform.class);
+        return gameObj;
     }
 
     // Adds game objects to the scene and initialize them
