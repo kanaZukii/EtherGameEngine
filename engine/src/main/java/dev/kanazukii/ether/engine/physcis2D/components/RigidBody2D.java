@@ -9,6 +9,7 @@ import dev.kanazukii.ether.engine.physcis2D.enums.BodyType;
 public class RigidBody2D extends Component{
     private Vector2f velocity = new Vector2f();
     private float angularDamping = 0.0f;
+    private float linearDamping = 0.0f;
     private float mass = 0;
     private BodyType bodyType = BodyType.Dynamic;
 
@@ -45,6 +46,10 @@ public class RigidBody2D extends Component{
         rawbody = body;
     }
 
+    public void setLinearDamping(float value){
+        linearDamping = value;
+    }
+
 
     public boolean getFixedRotation(){
         return fixedRotation;
@@ -72,6 +77,10 @@ public class RigidBody2D extends Component{
 
     public Body getRawBody(){
         return rawbody;
+    }
+
+    public float getLinearDamping(){
+        return linearDamping;
     }
 
     @Override

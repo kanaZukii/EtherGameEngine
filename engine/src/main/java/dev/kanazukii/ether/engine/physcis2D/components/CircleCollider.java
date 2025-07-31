@@ -1,8 +1,6 @@
 package dev.kanazukii.ether.engine.physcis2D.components;
 
-import dev.kanazukii.ether.engine.components.Component;
-
-public class CircleCollider extends Component {
+public class CircleCollider extends Collider {
     private float radius = 1f;
 
     public void radius(float value){

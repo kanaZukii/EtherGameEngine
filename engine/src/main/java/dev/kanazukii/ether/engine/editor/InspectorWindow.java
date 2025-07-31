@@ -5,6 +5,9 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.MouseListener;
 import dev.kanazukii.ether.engine.components.Uneditable;
+import dev.kanazukii.ether.engine.physcis2D.components.Box2DCollider;
+import dev.kanazukii.ether.engine.physcis2D.components.CircleCollider;
+import dev.kanazukii.ether.engine.physcis2D.components.RigidBody2D;
 import dev.kanazukii.ether.engine.renderer.PickingTexture;
 import dev.kanazukii.ether.engine.scenes.Scene;
 import imgui.ImGui;
@@ -25,6 +28,29 @@ public class InspectorWindow {
     public void ImGUI(){
         if(selectedGameObject != null){
             ImGui.begin("Inspector: " + selectedGameObject.getName());
+
+            if(ImGui.beginPopupContextWindow("ComponentAdder")){
+                if(ImGui.menuItem("Add RigidBody")){
+                    if(selectedGameObject.getComponent(RigidBody2D.class) == null){
+                        selectedGameObject.addComponent(new RigidBody2D());
+                    }
+                }
+                if(ImGui.menuItem("Add Box Collider")){
+                    if(selectedGameObject.getComponent(Box2DCollider.class) == null &&
+                        selectedGameObject.getComponent(CircleCollider.class) == null){
+                        selectedGameObject.addComponent(new Box2DCollider());
+                    }
+                }
+                if(ImGui.menuItem("Add Circle Collider")){
+                    if(selectedGameObject.getComponent(CircleCollider.class) == null &&
+                        selectedGameObject.getComponent(Box2DCollider.class) == null){
+                        selectedGameObject.addComponent(new CircleCollider());
+                    }
+                }
+
+                ImGui.endPopup();
+            }
+
             selectedGameObject.ImGUI();
             ImGui.end();
         }
