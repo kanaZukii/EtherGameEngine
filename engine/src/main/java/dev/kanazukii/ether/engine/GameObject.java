@@ -12,6 +12,7 @@ public class GameObject {
     private static int ID_Count = 0;
     private int uID = -1;
     private boolean serialize = true;
+    private boolean isDead = false;
 
     private String name;
     // List of all components (Sprite render and etc.) of the object
@@ -98,6 +99,12 @@ public class GameObject {
         }
     }
 
+    public void editorUpdate(float deltaTime){
+        for(int i = 0; i < components.size(); i++){
+            components.get(i).editorUpdate(deltaTime);
+        }
+    }
+
     private void generateID(){
         if(this.uID == -1){
             this.uID = ID_Count;
@@ -107,6 +114,17 @@ public class GameObject {
 
     public static void init(int maxID){
         ID_Count = maxID;
+    }
+
+    public void destroy(){
+        isDead = true;
+        for(int i = 0; i < components.size(); i++){
+            components.get(i).destroy();
+        }
+    }
+
+    public boolean isDead(){
+        return isDead;
     }
 
     public int getUID(){

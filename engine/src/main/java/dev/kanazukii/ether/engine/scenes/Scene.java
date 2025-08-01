@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.joml.Vector2f;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,18 +21,23 @@ import dev.kanazukii.ether.engine.components.ComponentDeserializer;
 import dev.kanazukii.ether.engine.components.Texture;
 import dev.kanazukii.ether.engine.components.TextureDeserializer;
 import dev.kanazukii.ether.engine.components.Transform;
+import dev.kanazukii.ether.engine.physcis2D.Physics2D;
 import dev.kanazukii.ether.engine.renderer.Renderer;
 
-public abstract class Scene {
+public class Scene {
     
-    protected Renderer renderer = new Renderer();
+    private Renderer renderer = new Renderer();
     protected Camera camera;
     private boolean running = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
-    protected boolean sceneLoaded = false;
+    private Physics2D physics;
 
-    public Scene(){
-        
+    private SceneInitializer sceneInit;
+
+    public Scene(SceneInitializer sceneInit){
+        this.sceneInit = sceneInit;
+        this.physics = new Physics2D();
+        this.renderer = new Renderer();
     }
 
     public boolean isRunning(){
@@ -38,14 +45,18 @@ public abstract class Scene {
     }
 
     public void init(){
-        
+        camera = new Camera(new Vector2f());
+        sceneInit.loadResource(this);
+        sceneInit.init(this);
     }
 
     // Scene start method, add all game object to the renderer
     public void start(){
-        for (GameObject gameObject : gameObjects) {
+        for (int i = 0; i < gameObjects.size(); i++) {
+            GameObject gameObject = gameObjects.get(i);
             gameObject.start();
             renderer.add(gameObject);
+            physics.add(gameObject);
         }
 
         running = true;
@@ -66,7 +77,12 @@ public abstract class Scene {
             gameObjects.add(gameObject);
             gameObject.start();
             renderer.add(gameObject);
+            physics.add(gameObject);
         }
+    }
+
+    public List<GameObject> getGameObjects(){
+        return gameObjects;
     }
 
     public GameObject getGameObjectByUID(int UID){
@@ -81,10 +97,10 @@ public abstract class Scene {
     }
 
     public void ImGUI(){
-
+        sceneInit.ImGUI();
     }
 
-    public void saveAtExit(){
+    public void save(){
         Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .registerTypeAdapter(Component.class, new ComponentDeserializer())
@@ -145,14 +161,54 @@ public abstract class Scene {
             System.out.println(maxComponentID);
             GameObject.init(maxGameObjectID);
             Component.init(maxComponentID);
-            sceneLoaded = true;
         }
     }
 
+    public void editorUpdate(float deltaTime){
+        camera.adjustProjection();
+
+        for (int i = 0; i < gameObjects.size(); i++){
+            GameObject gameObject = gameObjects.get(i);
+            gameObject.editorUpdate(deltaTime);
+            
+            if(gameObject.isDead()){
+                gameObjects.remove(i);
+                renderer.destroyGameObject(gameObject);
+                physics.destroyGameObject(gameObject);
+                i--;
+            }
+        }
+
+    }
+
     // Scene update logic
-    public abstract void update(float deltaTime);
+    public void update(float deltaTime){
+        //System.out.println("FPS: " + String.valueOf(Window.FPS));
+        camera.adjustProjection();
+        physics.update(deltaTime);
+
+        for (int i = 0; i < gameObjects.size(); i++){
+            GameObject gameObject = gameObjects.get(i);
+            gameObject.update(deltaTime);
+            
+            if(gameObject.isDead()){
+                gameObjects.remove(i);
+                renderer.destroyGameObject(gameObject);
+                physics.destroyGameObject(gameObject);
+                i--;
+            }
+        }
+    };
 
      // Call your renderer to draw all the objects
-    public abstract void render();
+    public void render(){
+        this.renderer.render();
+    };
+
+    public void destroy(){
+        for(GameObject gameObject : gameObjects){
+            gameObject.destroy();
+        }
+    }
 
 }

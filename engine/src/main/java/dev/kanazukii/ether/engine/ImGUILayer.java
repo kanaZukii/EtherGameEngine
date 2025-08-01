@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import dev.kanazukii.ether.engine.editor.GameViewPort;
 import dev.kanazukii.ether.engine.editor.InspectorWindow;
+import dev.kanazukii.ether.engine.editor.MenuBar;
 import dev.kanazukii.ether.engine.renderer.PickingTexture;
 import dev.kanazukii.ether.engine.scenes.Scene;
 import imgui.ImFontAtlas;
@@ -28,6 +29,7 @@ public class ImGUILayer {
     private long glfwWindowPtr;
     private GameViewPort gameView;
     private InspectorWindow inspector;
+    private MenuBar menuBar;
 
      // Mouse cursors provided by GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
@@ -39,6 +41,7 @@ public class ImGUILayer {
         this.glfwWindowPtr = glfwWindow;
         this.gameView = new GameViewPort();
         this.inspector = new InspectorWindow(pickingTexture);
+        this.menuBar = new MenuBar();
     }
 
     // Initialize Dear ImGui.
@@ -256,6 +259,7 @@ public class ImGUILayer {
         gameView.ImGUI();
         inspector.ImGUI();
         inspector.update(deltaTime, scene);
+        menuBar.ImGUI();
         ImGui.showDemoWindow();
         ImGui.end();
         ImGui.render();

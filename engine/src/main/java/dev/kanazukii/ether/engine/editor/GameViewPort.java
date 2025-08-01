@@ -4,6 +4,9 @@ import org.joml.Vector2f;
 
 import dev.kanazukii.ether.engine.MouseListener;
 import dev.kanazukii.ether.engine.Window;
+import dev.kanazukii.ether.engine.observers.EventSystem;
+import dev.kanazukii.ether.engine.observers.events.Event;
+import dev.kanazukii.ether.engine.observers.events.EventType;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
@@ -11,9 +14,22 @@ public class GameViewPort {
 
     // TODO: Should be seperated from the engine
     private float leftX, rightX, topY, botY;
+    private boolean gameRunning = false;
     
     public void ImGUI(){
-        ImGui.begin("Scene Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
+        ImGui.begin("Scene Viewport", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.MenuBar);
+
+        ImGui.beginMenuBar();
+        String playButtonLabel = gameRunning ? "Stop" : "Play";
+        if(ImGui.menuItem(playButtonLabel, "", false)){
+            gameRunning = !gameRunning;
+            if(gameRunning){
+                EventSystem.notify(null, new Event(EventType.EngineStartRuntime));
+            } else{
+                EventSystem.notify(null, new Event(EventType.EngineStopRuntime));
+            }
+        }
+        ImGui.endMenuBar();
 
         ImVec2 windowSize = getFitSizeViewPort();
         ImVec2 windowPos = getCenteredPosViewPort(windowSize);

@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 import dev.kanazukii.ether.engine.components.Component;
 
 public abstract class Collider extends Component{
-    private Vector2f offset = new Vector2f(0);
+    protected Vector2f offset = new Vector2f(0);
 
     public Vector2f getOffset(){
         return offset;

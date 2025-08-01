@@ -47,17 +47,21 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import dev.kanazukii.ether.engine.observers.EventSystem;
+import dev.kanazukii.ether.engine.observers.Observer;
+import dev.kanazukii.ether.engine.observers.events.Event;
+import dev.kanazukii.ether.engine.observers.events.EventType;
 import dev.kanazukii.ether.engine.renderer.DebugRenderer;
 import dev.kanazukii.ether.engine.renderer.FrameBuffer;
 import dev.kanazukii.ether.engine.renderer.PickingTexture;
 import dev.kanazukii.ether.engine.renderer.Renderer;
 import dev.kanazukii.ether.engine.renderer.Shader;
-import dev.kanazukii.ether.engine.scenes.LevelEditorScene;
-import dev.kanazukii.ether.engine.scenes.LevelScene;
+import dev.kanazukii.ether.engine.scenes.LevelEditorInitializer;
 import dev.kanazukii.ether.engine.scenes.Scene;
+import dev.kanazukii.ether.engine.scenes.SceneInitializer;
 import dev.kanazukii.ether.engine.utils.AssetPool;
 
-public class Window {
+public class Window implements Observer {
     
     private int width, height;
     private String title;
@@ -68,9 +72,8 @@ public class Window {
 
     private static PickingTexture pickingTex;
 
-    public float BG_r, BG_g, BG_b, BG_a;
-
     private static Scene currentScene;
+    private static boolean gameRuntimePlaying = false;
 
     public static float FPS = 0.0f;
     public static int targetFPS = 0;
@@ -83,10 +86,7 @@ public class Window {
         this.height = 1080;
         this.title = "Ether Game Editor";
 
-        this.BG_r = 0.3f;
-        this.BG_g = 0.3f;
-        this.BG_b = 0.3f;
-        this.BG_a = 1;
+        EventSystem.addObserver(this);
     }
 
     // Create one instance of Window
@@ -109,6 +109,10 @@ public class Window {
 
     public static Scene getScene(){
         return currentScene;
+    }
+
+    public static boolean isGameRunning(){
+        return gameRuntimePlaying;
     }
 
     public static FrameBuffer getFrameBuffer(){
@@ -134,7 +138,6 @@ public class Window {
     // Create and start showing a window
     public void run()
     {
-        System.out.println("What's up, Gamers");
         System.out.println("LWGL ver " + Version.getVersion());
         init();
         loop();
@@ -147,20 +150,13 @@ public class Window {
         glfwSetErrorCallback(null).free();
     }
 
-    public void changeScene(int index){
-        switch (index) {
-            case 0:
-                currentScene = new LevelEditorScene();
-                break;
-            case 1:
-                currentScene = new LevelScene();
-                break;
-        
-            default:
-                assert false : "Unknown Scene " + index;
-                return;
+    public void changeScene(SceneInitializer sceneInit){
+        if(currentScene != null){
+            currentScene.destroy();
         }
 
+        getImGUILayer().getInspector().setSelectedGameObject(null);
+        currentScene = new Scene(sceneInit);
         currentScene.loadScene();
         currentScene.init();
         currentScene.start();
@@ -233,7 +229,7 @@ public class Window {
         System.out.println("Vendor: " + glGetString(GL_VENDOR));
         System.out.println("GLSL Version: " + glGetString(GL_SHADING_LANGUAGE_VERSION));
         
-        changeScene(0);
+        changeScene(new LevelEditorInitializer());
     }
 
     // Window Update and Draw Loop
@@ -270,17 +266,21 @@ public class Window {
             DebugRenderer.beginFrame();
             framebuffer.bind();
 
-            glClearColor(BG_r, BG_g, BG_b, BG_a);
+            glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             if(deltaTime >= 0){
                 DebugRenderer.render();
                 Renderer.bindShader(defaultShader);
-                currentScene.update(deltaTime);
+                if(gameRuntimePlaying){
+                    currentScene.update(deltaTime);
+                } else{
+                    currentScene.editorUpdate(deltaTime);
+                }
+
                 currentScene.render();
             }
             framebuffer.unbind();
-
             FPS = (float)(1/deltaTime);
             
             imGUILayer.update(deltaTime, currentScene);
@@ -292,7 +292,30 @@ public class Window {
             deltaTime = endTime - startTime;
             startTime = endTime;
         }
-        currentScene.saveAtExit();
+    }
+
+    @Override
+    public void onNotify(GameObject gameObj, Event event) {
+        switch (event.type) {
+            case EngineStartRuntime:
+                gameRuntimePlaying = true;
+                currentScene.save();
+                window.changeScene(new LevelEditorInitializer());
+                break;
+            case EngineStopRuntime:
+                gameRuntimePlaying = false;
+                window.changeScene(new LevelEditorInitializer());
+                break;
+            case LoadScene:
+                changeScene(new LevelEditorInitializer());
+                break;
+            case SaveScene:
+                currentScene.save();
+                break;
+            case GameEvent:
+
+                break;
+        }
     }
 
 }

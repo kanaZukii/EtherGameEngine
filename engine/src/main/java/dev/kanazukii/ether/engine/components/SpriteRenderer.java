@@ -20,6 +20,10 @@ public class SpriteRenderer extends Component{
         isDirty = true;
     }
 
+    public void setDirty(){
+        isDirty = true;
+    }
+
     public boolean isDirty(){
         return isDirty;
     }
@@ -65,6 +69,14 @@ public class SpriteRenderer extends Component{
     // Check every update if the transform is modified
     @Override
     public void update(float deltaTime){
+        if(!lastTransform.equals(gameObject.transform)){
+            this.gameObject.transform.copyTo(lastTransform);
+            isDirty = true;
+        }
+    }
+
+    @Override
+    public void editorUpdate(float deltaTime){
         if(!lastTransform.equals(gameObject.transform)){
             this.gameObject.transform.copyTo(lastTransform);
             isDirty = true;

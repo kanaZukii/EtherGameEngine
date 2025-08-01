@@ -23,7 +23,7 @@ public class GizmoTools extends Component{
     }
 
     @Override
-    public void update(float deltaTime){
+    public void editorUpdate(float deltaTime){
         if(currentGizmo == 0){
             gameObject.getComponent(ScaleGizmo.class).setNotUsing();
             gameObject.getComponent(TranslateGizmo.class).setUsing();

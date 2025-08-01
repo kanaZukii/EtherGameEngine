@@ -79,4 +79,14 @@ public class Physics2D {
             body.createFixture(shape, rigidBod.getMass());
         }
     }
+
+    public void destroyGameObject(GameObject gameObject){
+        RigidBody2D rigidBod = gameObject.getComponent(RigidBody2D.class);
+        if(rigidBod == null) return;
+        
+        if(rigidBod.getRawBody() != null){
+            world.destroyBody(rigidBod.getRawBody());
+            rigidBod.setRawBody(null);
+        }
+    }
 }

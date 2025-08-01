@@ -27,6 +27,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.Window;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Texture;
@@ -305,6 +306,22 @@ public class RenderBatch implements Comparable<RenderBatch> {
             }
 
         shader.detach();
+    }
+
+    public boolean destroyIfExist(GameObject gameObject){
+        SpriteRenderer sprRenderer = gameObject.getComponent(SpriteRenderer.class);
+        for(int i = 0; i < numSprite; i++){
+            if(sprites[i] == sprRenderer){
+                for(int j = i; i < numSprite - 1; j++){
+                    sprites[j] = sprites[j+1];
+                    sprites[j].setDirty();
+                }
+                numSprite--;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

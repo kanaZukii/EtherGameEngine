@@ -16,7 +16,7 @@ public class RigidBody2D extends Component{
     private boolean fixedRotation = false;
     private boolean continuousCollision = true;
 
-    private Body rawbody = null;
+    private transient Body rawbody = null;
 
     public void setFixedRotation(boolean value){
         fixedRotation = value;

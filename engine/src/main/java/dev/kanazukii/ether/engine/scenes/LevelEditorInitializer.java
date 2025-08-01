@@ -16,40 +16,34 @@ import dev.kanazukii.ether.engine.utils.Configs;
 import imgui.ImGui;
 import imgui.ImVec2;
 
-public class LevelEditorScene extends Scene {
+public class LevelEditorInitializer extends SceneInitializer {
 
-    public LevelEditorScene(){
+    public LevelEditorInitializer(){
         System.out.println("Level Editor Scene");
     }
 
 
-    private GameObject Editor_Components = new GameObject("EDITOR");
+    private GameObject Editor_Components;
     private Spritesheet tile_set;
 
     @Override
-    public void init() {
+    public void init(Scene scene) {
+        Editor_Components = scene.createGameObject("EDITOR");
+        Editor_Components.setSerialize(false);
 
-        camera = new Camera(new Vector2f());
-
-        loadAssets();
-
-        Editor_Components.addComponent(new EditorCamera(camera));
+        Editor_Components.addComponent(new EditorCamera(scene.camera));
         Editor_Components.addComponent(new MouseControls());
         Editor_Components.addComponent(new GridLines());
         Editor_Components.addComponent(new GizmoTools(AssetPool.getSpriteSheet("assets/editor/gizmo_sprites.png")));
 
-        Editor_Components.start();
+        scene.addGameObject(Editor_Components);
 
         tile_set = AssetPool.getSpriteSheet("assets/textures/tilemap.png");
-        
-        if(sceneLoaded){
-            return;
-        }
-
     }
     
     // TODO: FIX Texture loading mismatch when load order changed (Texture frist time used in update)
-    private void loadAssets(){
+    @Override
+    public void loadResource(Scene scene){
         AssetPool.getShader("assets/shaders/default.glsl");
 
         AssetPool.addSpriteSheet("assets/editor/gizmo_sprites.png",
@@ -59,22 +53,6 @@ public class LevelEditorScene extends Scene {
         AssetPool.addSpriteSheet("assets/textures/tilemap.png", 
                                 new Spritesheet(AssetPool.getTexture("assets/textures/tilemap.png"), 
                                     16, 16, 10, 0));
-
-        AssetPool.addSpriteSheet("assets/textures/skeleton_spritesheet.png", 
-                                new Spritesheet(AssetPool.getTexture("assets/textures/skeleton_spritesheet.png"), 
-                                    16, 16, 8, 0));
-    }
-
-    @Override
-    public void update(float deltaTime) {
-        //System.out.println("FPS: " + String.valueOf(Window.FPS));
-        camera.adjustProjection();
-        Editor_Components.update(deltaTime);
-
-        for (GameObject gameObject: gameObjects){
-            gameObject.update(deltaTime);
-        }
-
     }
 
     private void editorImGUI(){
@@ -130,10 +108,4 @@ public class LevelEditorScene extends Scene {
 
         ImGui.end();
     }
-
-    @Override
-    public void render() {
-        renderer.render();
-    }
-    
 }

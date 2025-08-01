@@ -70,6 +70,7 @@ public class InspectorWindow {
                 
                 if(!disableSelection){
                     selectedGameObject = currentScene.getGameObjectByUID(uid);
+                    //if(selectedGameObject.getName().equals("EDITOR")) selectedGameObject = null;
                 }
         }
     }
@@ -80,6 +81,10 @@ public class InspectorWindow {
 
     public GameObject getSelectedGameObject(){
         return selectedGameObject;
+    }
+
+    public void setSelectedGameObject(GameObject gameObject){
+        selectedGameObject = gameObject;
     }
 
 }

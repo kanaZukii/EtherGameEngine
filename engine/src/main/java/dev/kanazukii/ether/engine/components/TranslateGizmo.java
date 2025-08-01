@@ -10,7 +10,7 @@ public class TranslateGizmo extends Gizmo {
     }
 
     @Override
-    public void update(float deltaTime){
+    public void editorUpdate(float deltaTime){
 
         if(activeGameObject != null){
             if(xAxisActive){
@@ -22,6 +22,6 @@ public class TranslateGizmo extends Gizmo {
             }
         }
         
-        super.update(deltaTime);
+        super.editorUpdate(deltaTime);
     }
 }

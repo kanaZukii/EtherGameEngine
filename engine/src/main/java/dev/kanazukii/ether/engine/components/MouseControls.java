@@ -28,8 +28,9 @@ public class MouseControls extends Component {
     }
 
     private float placeCD = 0.0f;
+    
     @Override
-    public void update(float deltaTime){
+    public void editorUpdate(float deltaTime){
 
         placeCD += deltaTime;
 

@@ -58,6 +58,14 @@ public class Gizmo extends Component {
 
     @Override
     public void update(float deltaTime){
+        if(using) {
+            setInactive(); 
+            return;
+        }
+    }
+
+    @Override
+    public void editorUpdate(float deltaTime){
         if(!using) {
             setInactive(); 
             return;
@@ -66,6 +74,7 @@ public class Gizmo extends Component {
         activeGameObject = inspector.getSelectedGameObject();
 
         if(activeGameObject != null){
+            System.out.println("Activated");
             setActive();
         } else{
             setInactive();

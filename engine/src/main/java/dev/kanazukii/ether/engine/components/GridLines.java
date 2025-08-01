@@ -12,7 +12,7 @@ public class GridLines extends Component {
     
 
     @Override
-    public void update(float deltaTime){
+    public void editorUpdate(float deltaTime){
         Camera camera = Window.getScene().getCamera();
 
         Vector2f cameraPosition = camera.getPosition();

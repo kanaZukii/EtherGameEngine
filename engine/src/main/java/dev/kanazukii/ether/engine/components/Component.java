@@ -18,6 +18,7 @@ public abstract class Component {
 
     // Keeps a refernece to the parent game object (Should be overwritten in the child class)
     public transient GameObject gameObject = null;
+    
 
     // for initialization
     public void start(){
@@ -74,6 +75,11 @@ public abstract class Component {
 
     }
 
+
+    public void editorUpdate(float deltaTime){
+        
+    }
+
     public void generateID(){
         if(this.uID == -1){
             this.uID = ID_Count;
@@ -83,6 +89,10 @@ public abstract class Component {
 
     public int getUID(){
         return this.uID;
+    }
+
+    public void destroy(){
+        
     }
 
     public static void init(int maxID){

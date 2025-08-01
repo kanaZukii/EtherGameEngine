@@ -94,7 +94,7 @@ public class EditorCamera extends Component {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void editorUpdate(float deltaTime) {
         mouseControls(deltaTime);
         keyboardControls(deltaTime);
 
