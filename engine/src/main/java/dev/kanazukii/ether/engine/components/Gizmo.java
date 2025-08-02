@@ -1,11 +1,14 @@
 package dev.kanazukii.ether.engine.components;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import dev.kanazukii.ether.engine.GameObject;
+import dev.kanazukii.ether.engine.KeyListener;
 import dev.kanazukii.ether.engine.MouseListener;
 import dev.kanazukii.ether.engine.Prefabs;
 import dev.kanazukii.ether.engine.Window;
@@ -17,7 +20,7 @@ public class Gizmo extends Component {
     private Vector4f yAxisColor = new Vector4f(0.9f, 0.1f, 0.1f, 0.8f);
     private Vector4f hoverColor = new Vector4f(1.0f, 1.0f, 0.1f, 0.8f);
     private Vector2f yAxisOffset = new Vector2f(0,0);
-    private Vector2f xAxisOffset = new Vector2f(Configs.GRID_WIDTH/3,Configs.GRID_HEIGHT-9);
+    private Vector2f xAxisOffset = new Vector2f(0,0);
 
     private GameObject xAxisObject;
     private GameObject yAxisObject;
@@ -32,8 +35,8 @@ public class Gizmo extends Component {
 
     private boolean using = false;
 
-    private int gizmoWidth =  32;
-    private int gizmoHeight =  gizmoWidth * 2;
+    private float gizmoWidth =  Configs.GRID_WIDTH;
+    private float gizmoHeight =  gizmoWidth * 2;
 
     public Gizmo(Sprite arrowSprite, InspectorWindow inspector){
         this.inspector = inspector; 
@@ -45,8 +48,12 @@ public class Gizmo extends Component {
         xAxisObject.addComponent(new Uneditable());
         yAxisObject.addComponent(new Uneditable());
 
+        yAxisOffset.set(0,gizmoHeight/2.5f);
+        xAxisOffset.set(gizmoWidth/1.25f,0);
+
         Window.getScene().addGameObject(xAxisObject);
         Window.getScene().addGameObject(yAxisObject);
+        
     }
 
     @Override
@@ -74,8 +81,16 @@ public class Gizmo extends Component {
         activeGameObject = inspector.getSelectedGameObject();
 
         if(activeGameObject != null){
-            System.out.println("Activated");
             setActive();
+            // TODO: Move to its own keyBinding component clas
+            if(!KeyListener.isKeyPressed(GLFW_KEY_LEFT_CONTROL) &&
+                (KeyListener.isKeyPressed(GLFW_KEY_D) && KeyListener.isKeyBeginPress(GLFW_KEY_D))){
+                GameObject newObj = this.activeGameObject.copy();
+                Window.getScene().addGameObject(newObj);
+                newObj.transform.position.add(0.1f, 0.1f);
+                inspector.setSelectedGameObject(newObj);
+                return;
+            }
         } else{
             setInactive();
             return;
@@ -130,14 +145,14 @@ public class Gizmo extends Component {
 
     private boolean xCheckHover(){
         Vector2f mousePosition = new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY());
-        return mousePosition.x >= xAxisObject.transform.position.x  && mousePosition.x <= xAxisObject.transform.position.x + gizmoHeight
-            && mousePosition.y >= xAxisObject.transform.position.y - gizmoWidth && mousePosition.y <= xAxisObject.transform.position.y;
+        return mousePosition.x >= xAxisObject.transform.position.x - (gizmoWidth/2.0f) && mousePosition.x <= xAxisObject.transform.position.x  + (gizmoHeight/2.0f)
+            && mousePosition.y >= xAxisObject.transform.position.y - (gizmoWidth/2.0f) && mousePosition.y <= xAxisObject.transform.position.y + (gizmoWidth/2.0f);
     }
 
     private boolean yCheckHover(){
         Vector2f mousePosition = new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY());
-        return mousePosition.x >= yAxisObject.transform.position.x && mousePosition.x <= yAxisObject.transform.position.x + gizmoWidth
-            && mousePosition.y >= yAxisObject.transform.position.y && mousePosition.y <= yAxisObject.transform.position.y + gizmoHeight;
+        return mousePosition.x >= yAxisObject.transform.position.x - (gizmoWidth/2.0f) && mousePosition.x <= yAxisObject.transform.position.x + (gizmoWidth/2.0f)
+            && mousePosition.y >= yAxisObject.transform.position.y - (gizmoHeight/2.0f) && mousePosition.y <= yAxisObject.transform.position.y + (gizmoHeight/2.0f);
     }
 
     public void setUsing(){

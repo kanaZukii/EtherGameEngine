@@ -10,7 +10,7 @@ public class RigidBody2D extends Component{
     private Vector2f velocity = new Vector2f();
     private float angularDamping = 0.0f;
     private float linearDamping = 0.0f;
-    private float mass = 0;
+    private float mass = 1.0f;
     private BodyType bodyType = BodyType.Dynamic;
 
     private boolean fixedRotation = false;
@@ -87,7 +87,7 @@ public class RigidBody2D extends Component{
     public void update(float deltaTime){
         if(rawbody != null){
             this.gameObject.transform.position.set(rawbody.getPosition().x, rawbody.getPosition().y);
-            this.gameObject.transform.rotation =  (float)Math.toDegrees(rawbody.getAngle());
+            this.gameObject.transform.rotation = (float)Math.toDegrees(rawbody.getAngle());
         }
     }
 }

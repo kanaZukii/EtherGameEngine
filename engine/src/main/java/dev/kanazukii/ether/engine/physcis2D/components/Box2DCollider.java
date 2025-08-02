@@ -3,10 +3,11 @@ package dev.kanazukii.ether.engine.physcis2D.components;
 import org.joml.Vector2f;
 
 import dev.kanazukii.ether.engine.renderer.DebugRenderer;
+import dev.kanazukii.ether.engine.utils.Configs;
 
 
 public class Box2DCollider extends Collider {
-    private Vector2f halfSize = new Vector2f(1);
+    private Vector2f halfSize = new Vector2f(Configs.GRID_WIDTH);
     private Vector2f origin = new Vector2f(0);
 
     public Vector2f getHalfSize(){

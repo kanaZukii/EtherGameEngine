@@ -8,11 +8,14 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
+import java.io.ObjectInputFilter.Config;
+
 import org.joml.Vector2f;
 
 import dev.kanazukii.ether.engine.Camera;
 import dev.kanazukii.ether.engine.KeyListener;
 import dev.kanazukii.ether.engine.MouseListener;
+import dev.kanazukii.ether.engine.utils.Configs;
 
 public class EditorCamera extends Component {
 
@@ -22,7 +25,7 @@ public class EditorCamera extends Component {
     private float lerpTime = 0.0f;
 
     // For controlling camera with keyboard
-    private float cameraSpeed = 400f;
+    private float cameraSpeed = 5f;
     private Vector2f targetPosition;
 
 
@@ -104,7 +107,7 @@ public class EditorCamera extends Component {
             levelEditorCamera.setZoom(levelEditorCamera.getZoom() 
                                         + ((1.0f - levelEditorCamera.getZoom()) * lerpTime));    
             lerpTime += 0.1f * deltaTime;
-            if(Math.abs(levelEditorCamera.getPosition().x) <= 5 && Math.abs(levelEditorCamera.getPosition().y) <= 5){
+            if(Math.abs(levelEditorCamera.getPosition().x) <= Configs.GRID_WIDTH && Math.abs(levelEditorCamera.getPosition().y) <= Configs.GRID_HEIGHT){
                 levelEditorCamera.getPosition().set(0,0);
                 levelEditorCamera.setZoom(1.0f);
                 lerpTime = 0;

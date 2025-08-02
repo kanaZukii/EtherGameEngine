@@ -3,8 +3,16 @@ package dev.kanazukii.ether.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import dev.kanazukii.ether.engine.components.Component;
+import dev.kanazukii.ether.engine.components.ComponentDeserializer;
+import dev.kanazukii.ether.engine.components.SpriteRenderer;
+import dev.kanazukii.ether.engine.components.Texture;
+import dev.kanazukii.ether.engine.components.TextureDeserializer;
 import dev.kanazukii.ether.engine.components.Transform;
+import dev.kanazukii.ether.engine.utils.AssetPool;
 import imgui.ImGui;
 
 public class GameObject {
@@ -112,6 +120,11 @@ public class GameObject {
         }
     }
 
+    private void generateNewID(){
+        this.uID = ID_Count;
+        ID_Count++;
+    }
+
     public static void init(int maxID){
         ID_Count = maxID;
     }
@@ -129,5 +142,26 @@ public class GameObject {
 
     public int getUID(){
         return uID;
+    }
+
+    public GameObject copy(){
+        Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Component.class, new ComponentDeserializer())
+                        .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
+                        .registerTypeAdapter(Texture.class, new TextureDeserializer())
+                        .create();
+        String jsonObj = gson.toJson(this);
+        GameObject newObj = gson.fromJson(jsonObj, GameObject.class);
+        newObj.generateNewID();
+        for(Component component: newObj.getComponentList()){
+            component.generateNewID();
+        }
+
+        SpriteRenderer spriteRender = newObj.getComponent(SpriteRenderer.class);
+        if(spriteRender != null && spriteRender.getTexture() != null){
+            spriteRender.setTexture(AssetPool.getTexture(spriteRender.getTexture().getFilePath()));
+        }
+
+        return newObj;
     }
 }

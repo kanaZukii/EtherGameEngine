@@ -39,10 +39,10 @@ public class MouseControls extends Component {
         }
 
         if(heldObject != null){
-            heldObject.transform.position.x = MouseListener.getOrthoX() - 4;
-            heldObject.transform.position.y = MouseListener.getOrthoY() - 20;
-            heldObject.transform.position.x = (int)(heldObject.transform.position.x / Configs.GRID_WIDTH) * Configs.GRID_WIDTH;
-            heldObject.transform.position.y = (int)(heldObject.transform.position.y / Configs.GRID_HEIGHT) * Configs.GRID_HEIGHT;
+            heldObject.transform.position.x = MouseListener.getOrthoX();
+            heldObject.transform.position.y = MouseListener.getOrthoY();
+            heldObject.transform.position.x = (int)(heldObject.transform.position.x / Configs.GRID_WIDTH) * Configs.GRID_WIDTH  + (Configs.GRID_WIDTH/2);
+            heldObject.transform.position.y = (int)(heldObject.transform.position.y / Configs.GRID_HEIGHT) * Configs.GRID_HEIGHT + (Configs.GRID_HEIGHT/2);
 
             if(MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_1) && placeCD >= 0.15f){
                 placeObject();

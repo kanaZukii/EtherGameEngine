@@ -59,6 +59,6 @@ public class Transform extends Component{
         EtherImGUi.dragVec2Controls("Position: ", position);
         EtherImGUi.dragVec2Controls("Scale: ", scale, Configs.GRID_WIDTH);
         rotation = EtherImGUi.dragFloatControls("Rotation: ", rotation);
-        EtherImGUi.dragIntControls("Z Index: ", zIndex);
+        zIndex = EtherImGUi.dragIntControls("Z Index: ", zIndex);
     }
 }

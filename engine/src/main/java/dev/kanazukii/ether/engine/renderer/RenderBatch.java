@@ -62,6 +62,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private int numSprite = 0;
     private boolean spriteFull = false;
 
+    private Renderer renderer;
     private float[] vertices;
 
     // List of textures (A whole image / A Sprite sheet ) that a single render batch can draw '8' (index 0 is reserved for no texture)
@@ -73,8 +74,8 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private int maxBatchSize;   // Maximum Object that it can render per draw call
     private int zIndex;     // Z index for blending
 
-    public RenderBatch(int maxBatchSize, int zIndex) {
-        System.out.println("Creating a Render Batch");
+    public RenderBatch(int maxBatchSize, int zIndex, Renderer renderer) {
+        this.renderer = renderer;
 
         sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
@@ -186,8 +187,8 @@ public class RenderBatch implements Comparable<RenderBatch> {
         }
 
         // Add vertices with the properties
-        float xStep = 1.0f;
-        float yStep = 1.0f;
+        float xStep = 0.5f;
+        float yStep = 0.5f;
         
         float rotation = sprite.gameObject.transform.rotation;
         Matrix4f transformMatrix = new Matrix4f().identity();
@@ -199,11 +200,11 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
         for(int i = 0; i < 4; i++){
             if(i == 1){
-                yStep = 0.0f;
+                yStep = -0.5f;
             } else if (i == 2){
-                xStep = 0.0f;
+                xStep = -0.5f;
             } else if (i == 3){
-                yStep = 1.0f;
+                yStep = 0.5f;
             }
 
             // Load position
@@ -272,7 +273,15 @@ public class RenderBatch implements Comparable<RenderBatch> {
                 rebufferData = true;
                 //System.out.println("Updated: " + i);
             }
+
+            // TODO: Implement Better Solution
+            if(sprite.gameObject.transform.zIndex != zIndex){
+                destroyIfExist(sprite.gameObject);
+                renderer.add(sprite.gameObject);
+                i--;
+            }
         }
+
         // Rebuffer data for the frame if a sprite is dirty (modified)
         if(rebufferData){
             glBindBuffer(GL_ARRAY_BUFFER, vboID);

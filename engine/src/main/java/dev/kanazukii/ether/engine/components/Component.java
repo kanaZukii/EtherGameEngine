@@ -10,6 +10,7 @@ import org.joml.Vector4f;
 import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.editor.EtherImGUi;
 import imgui.ImGui;
+import imgui.type.ImInt;
 
 public abstract class Component {
     
@@ -60,6 +61,13 @@ public abstract class Component {
                     Vector4f val = (Vector4f)value;
                     float[] imVec = {val.x, val.y, val.z, val.w};
                     if(ImGui.dragFloat4(name, imVec)){ val.set(imVec[0],imVec[1],imVec[2],imVec[3]);}
+                } else if (type.isEnum()){
+                    String[] enumValues = getEnumValues(type);
+                    String enumType = ((Enum)value).name();
+                    ImInt index = new ImInt(indexOf(enumType, enumValues));
+                    if(ImGui.combo(field.getName(), index, enumValues, enumValues.length)){
+                        field.set(this, type.getEnumConstants()[index.get()]);
+                    }
                 }
                 
 
@@ -87,9 +95,36 @@ public abstract class Component {
         }
     }
 
+    public void generateNewID(){
+        this.uID = ID_Count;
+        ID_Count++;
+    }
+
     public int getUID(){
         return this.uID;
     }
+
+
+    private <T extends Enum<T>> String[] getEnumValues(Class<T> enumType){
+        String[] enumValues = new String[enumType.getEnumConstants().length];
+        int i = 0;
+        for(T enumIntValue : enumType.getEnumConstants()){
+            enumValues[i] = enumIntValue.name();
+            i++;
+        }
+        return enumValues;
+    }
+
+    private int indexOf(String string, String[] arr){
+        for(int i = 0; i < arr.length; i++){
+            if(string.equals(arr[i])){
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
 
     public void destroy(){
         

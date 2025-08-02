@@ -13,11 +13,11 @@ public class Camera {
     private Vector2f position;
     private float zoom = 1.0f;
 
-    private float worldUnits = 32.0f;
-    private float width = 40.0f;
-    private float height = 21.0f;
+    //private float worldUnits = 32.0f;
+    private float projectWidth = 6;
+    private float projectionHeight = 3;
     private float farZ = 100.0f; // Farthest in the z axis (Doesn't really matter because we are in 2D)
-    private Vector2f proejectionSize = new Vector2f(worldUnits * width, worldUnits * height); // 1280 x 672
+    private Vector2f proejectionSize = new Vector2f(projectWidth, projectionHeight); 
 
     public Camera(Vector2f position){
         this.position = position;
