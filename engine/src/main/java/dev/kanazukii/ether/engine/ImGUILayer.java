@@ -3,6 +3,7 @@ package dev.kanazukii.ether.engine;
 import static org.lwjgl.glfw.GLFW.*;
 
 import dev.kanazukii.ether.engine.editor.GameViewPort;
+import dev.kanazukii.ether.engine.editor.HeirarchyWindow;
 import dev.kanazukii.ether.engine.editor.InspectorWindow;
 import dev.kanazukii.ether.engine.editor.MenuBar;
 import dev.kanazukii.ether.engine.renderer.PickingTexture;
@@ -30,6 +31,7 @@ public class ImGUILayer {
     private GameViewPort gameView;
     private InspectorWindow inspector;
     private MenuBar menuBar;
+    private HeirarchyWindow heirarchyWindow;
 
      // Mouse cursors provided by GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
@@ -42,6 +44,7 @@ public class ImGUILayer {
         this.gameView = new GameViewPort();
         this.inspector = new InspectorWindow(pickingTexture);
         this.menuBar = new MenuBar();
+        this.heirarchyWindow = new HeirarchyWindow();
     }
 
     // Initialize Dear ImGui.
@@ -245,6 +248,8 @@ public class ImGUILayer {
 
         // DockSpace
         ImGui.dockSpace(ImGui.getID("DockSpace"));
+        menuBar.ImGUI();
+        ImGui.end();
     }
 
 
@@ -258,11 +263,8 @@ public class ImGUILayer {
         scene.ImGUI();
         gameView.ImGUI();
         inspector.ImGUI();
+        heirarchyWindow.ImGUI();
         inspector.update(deltaTime, scene);
-        menuBar.ImGUI();
-        ImGui.showDemoWindow();
-        ImGui.end();
-        ImGui.render();
 
         endFrame();
     }
