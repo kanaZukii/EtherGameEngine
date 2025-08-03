@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import dev.kanazukii.ether.engine.GameObject;
+import dev.kanazukii.ether.engine.components.AnimationRenderer;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Texture;
 
@@ -21,9 +22,12 @@ public class Renderer {
 
     // Add a game object that has a sprite renderer component, components that do not required to be draw should be ignored
     public void add(GameObject gameObject){
+        SpriteRenderer animatedSprite = gameObject.getComponent(AnimationRenderer.class);
         SpriteRenderer sprite = gameObject.getComponent(SpriteRenderer.class);
 
-        if(sprite != null){
+        if(animatedSprite != null){
+            addToRender(animatedSprite);
+        } else if(sprite != null){
             addToRender(sprite);
         }
     }

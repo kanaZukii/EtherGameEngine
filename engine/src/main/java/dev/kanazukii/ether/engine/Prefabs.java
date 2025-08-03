@@ -1,7 +1,13 @@
 package dev.kanazukii.ether.engine;
 
+import org.joml.Vector2f;
+
+import dev.kanazukii.ether.engine.components.AnimationRenderer;
 import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
+import dev.kanazukii.ether.engine.components.Spritesheet;
+import dev.kanazukii.ether.engine.components.PlayerControls;
+import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class Prefabs {
     
@@ -33,6 +39,21 @@ public class Prefabs {
         spriteDup.transform.copyTo(spriteDup.transform);
 
         return spriteDup;
+    }
+
+    public static GameObject createAnimatedSprite(Spritesheet spritesheet, int[] animationIndices, float width, float height){
+        GameObject animatedSprite = Window.getScene().createGameObject("animatedSprite");
+        animatedSprite.transform.scale = new Vector2f(width, height);
+        animatedSprite.addComponent(new AnimationRenderer(spritesheet, animationIndices));
+        return animatedSprite;
+    }
+
+    public static GameObject createPlayerCharacter(Spritesheet spritesheet, int[] animationIndices, float width, float height){
+        GameObject player = Window.getScene().createGameObject("Player");
+        player.transform.scale = new Vector2f(width, height);
+        player.addComponent(new AnimationRenderer(spritesheet, animationIndices));
+        player.addComponent(new PlayerControls());
+        return player;
     }
 
 }

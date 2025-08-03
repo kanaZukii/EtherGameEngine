@@ -20,7 +20,6 @@ public class ComponentDeserializer implements JsonSerializer<Component>, JsonDes
         JsonElement element = jsonObj.get("properties");
 
         try {
-            
             return context.deserialize(element, Class.forName(type));
 
         } catch (Exception e) {
