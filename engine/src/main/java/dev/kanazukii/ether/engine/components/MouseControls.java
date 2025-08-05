@@ -22,7 +22,7 @@ public class MouseControls extends Component {
     }
 
     public void placeObject(){
-        System.out.println("Placed: " + heldObject.getName());
+        System.out.println("Placed: " + heldObject.name);
         heldObject = null;
         //pickUpObject(Prefabs.duplicateSpriteObj(heldObject));
     }

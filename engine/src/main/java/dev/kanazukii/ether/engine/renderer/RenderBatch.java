@@ -182,7 +182,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
                 } 
             }
             if(!found){
-                System.err.println( sprite.gameObject.getName() + ": sprite texture Exist but cannot be found!");
+                System.err.println( sprite.gameObject.name + ": sprite texture Exist but cannot be found!");
             }
         }
 

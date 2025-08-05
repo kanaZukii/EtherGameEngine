@@ -34,6 +34,7 @@ public class Gizmo extends Component {
     private InspectorWindow inspector;
 
     private boolean using = false;
+    private boolean gameStart = true;
 
     private float gizmoWidth =  Configs.GRID_WIDTH;
     private float gizmoHeight =  gizmoWidth * 2;
@@ -65,14 +66,17 @@ public class Gizmo extends Component {
 
     @Override
     public void update(float deltaTime){
-        if(using) {
+        if(gameStart) {
             setInactive(); 
+            gameStart = false;
             return;
         }
     }
 
     @Override
     public void editorUpdate(float deltaTime){
+        gameStart = true;
+
         if(!using) {
             setInactive(); 
             return;

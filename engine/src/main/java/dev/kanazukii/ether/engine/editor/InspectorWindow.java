@@ -1,8 +1,11 @@
 package dev.kanazukii.ether.engine.editor;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_0;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 import dev.kanazukii.ether.engine.GameObject;
+import dev.kanazukii.ether.engine.KeyListener;
 import dev.kanazukii.ether.engine.MouseListener;
 import dev.kanazukii.ether.engine.components.Uneditable;
 import dev.kanazukii.ether.engine.physcis2D.components.Box2DCollider;
@@ -27,7 +30,7 @@ public class InspectorWindow {
 
     public void ImGUI(){
         if(selectedGameObject != null){
-            ImGui.begin("Inspector: " + selectedGameObject.getName());
+            ImGui.begin("Inspector: " + selectedGameObject.name + "###InspectorWindow");
 
             if(ImGui.beginPopupContextWindow("ComponentAdder")){
                 if(ImGui.menuItem("Add RigidBody")){
@@ -59,18 +62,22 @@ public class InspectorWindow {
     public void update(float deltaTime, Scene currentScene){
         debounceTime -= deltaTime;
 
+        if(!disableSelection && selectedGameObject != null && KeyListener.isKeyBeginPress(GLFW_KEY_BACKSPACE)){
+            if(selectedGameObject.getComponent(Uneditable.class) !=  null) return;
+            selectedGameObject.destroy();
+            selectedGameObject = null;
+        }
+
         if(MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT) && debounceTime < 0){
                 int x = (int)MouseListener.getSreenX();
                 int y = (int)MouseListener.getSreenY();
                 int uid = pickingTex.readPixel(x, y);
                 debounceTime = 0.2f;
                 if(currentScene.getGameObjectByUID(uid) !=  null){
-                    if(currentScene.getGameObjectByUID(uid).getComponent(Uneditable.class) !=  null) return;
-                }
-                
-                if(!disableSelection){
-                    selectedGameObject = currentScene.getGameObjectByUID(uid);
-                    //if(selectedGameObject.getName().equals("EDITOR")) selectedGameObject = null;
+                    if(currentScene.getGameObjectByUID(uid).getComponent(Uneditable.class) ==  null
+                        && !disableSelection) {
+                            selectedGameObject = currentScene.getGameObjectByUID(uid);
+                        }
                 }
         }
     }

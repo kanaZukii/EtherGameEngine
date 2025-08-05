@@ -56,6 +56,7 @@ public class Transform extends Component{
 
     @Override
     public void ImGUI() {
+        gameObject.name = EtherImGUi.inputText("Name: ", gameObject.name);
         EtherImGUi.dragVec2Controls("Position: ", position);
         EtherImGUi.dragVec2Controls("Scale: ", scale, Configs.GRID_WIDTH);
         rotation = EtherImGUi.dragFloatControls("Rotation: ", rotation);

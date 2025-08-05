@@ -6,6 +6,7 @@ import org.joml.Vector4f;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiStyleVar;
+import imgui.type.ImString;
 
 public class EtherImGUi {
 
@@ -120,6 +121,28 @@ public class EtherImGUi {
         ImGui.popID();
 
         return res;
+    }
+
+    public static String inputText(String label, String text){
+        
+        ImGui.pushID(label);
+        ImGui.columns(2);
+        ImGui.setColumnWidth(0, defaultColWidth);
+        ImGui.text(label);
+        ImGui.nextColumn();
+
+        ImString out = new ImString(text, 256);
+        if(ImGui.inputText("##" + label, out)){
+            ImGui.columns(1);
+            ImGui.popID();
+
+            return out.get();
+        }
+
+        ImGui.columns(1);
+        ImGui.popID();
+
+        return text;
     }
 
 }

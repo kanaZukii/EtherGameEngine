@@ -22,7 +22,7 @@ public class GameObject {
     private boolean serialize = true;
     private boolean isDead = false;
 
-    private String name;
+    public String name;
     // List of all components (Sprite render and etc.) of the object
     private List<Component> components;
     public transient Transform transform;
@@ -36,11 +36,7 @@ public class GameObject {
         // TODO: Fix uID assignment when loading serialized saved scenes
         generateID();
     }
-
-    public String getName(){
-        return name;
-    }
-
+    
     public void setSerialize(boolean value){
         serialize = value;
     }

@@ -3,7 +3,7 @@ package dev.kanazukii.ether.engine;
 import static org.lwjgl.glfw.GLFW.*;
 
 import dev.kanazukii.ether.engine.editor.GameViewPort;
-import dev.kanazukii.ether.engine.editor.HeirarchyWindow;
+import dev.kanazukii.ether.engine.editor.HierarchyWindow;
 import dev.kanazukii.ether.engine.editor.InspectorWindow;
 import dev.kanazukii.ether.engine.editor.MenuBar;
 import dev.kanazukii.ether.engine.renderer.PickingTexture;
@@ -31,7 +31,7 @@ public class ImGUILayer {
     private GameViewPort gameView;
     private InspectorWindow inspector;
     private MenuBar menuBar;
-    private HeirarchyWindow heirarchyWindow;
+    private HierarchyWindow heirarchyWindow;
 
      // Mouse cursors provided by GLFW
     private final long[] mouseCursors = new long[ImGuiMouseCursor.COUNT];
@@ -44,7 +44,7 @@ public class ImGUILayer {
         this.gameView = new GameViewPort();
         this.inspector = new InspectorWindow(pickingTexture);
         this.menuBar = new MenuBar();
-        this.heirarchyWindow = new HeirarchyWindow();
+        this.heirarchyWindow = new HierarchyWindow();
     }
 
     // Initialize Dear ImGui.
@@ -133,7 +133,8 @@ public class ImGUILayer {
                 ImGui.setWindowFocus(null);
             }
 
-            // If imGUI not listening to mouse inputs pass it to our MouseListener
+            //TODO: FIX THIS ADD MORE CHECKS WHEN A WINDOW IS ON TOP OF IT
+            // If imGUI not listening to mouse inputs pass it to our MouseListener 
             if (!io.getWantCaptureMouse() || gameView.getWantCaptureMouse()) {
                 MouseListener.mouseButtonCallback(w, button, action, mods);
             }
@@ -306,5 +307,9 @@ public class ImGUILayer {
 
     public InspectorWindow getInspector(){
         return inspector;
+    }
+
+    public GameViewPort getViewPort(){
+        return gameView;
     }
 }
