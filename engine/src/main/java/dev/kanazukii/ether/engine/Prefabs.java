@@ -3,6 +3,7 @@ package dev.kanazukii.ether.engine;
 import org.joml.Vector2f;
 
 import dev.kanazukii.ether.engine.components.AnimationRenderer;
+import dev.kanazukii.ether.engine.components.GameCamera;
 import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
@@ -53,6 +54,7 @@ public class Prefabs {
         player.transform.scale = new Vector2f(width, height);
         player.addComponent(new AnimationRenderer(spritesheet, animationIndices));
         player.addComponent(new PlayerControls());
+        player.addComponent(new GameCamera());
         return player;
     }
 
