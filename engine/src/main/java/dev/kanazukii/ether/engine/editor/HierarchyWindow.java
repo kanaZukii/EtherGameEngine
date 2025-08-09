@@ -3,7 +3,6 @@ package dev.kanazukii.ether.engine.editor;
 import java.util.List;
 
 import dev.kanazukii.ether.engine.GameObject;
-import dev.kanazukii.ether.engine.ImGUILayer;
 import dev.kanazukii.ether.engine.Window;
 import imgui.ImGui;
 import imgui.flag.ImGuiTreeNodeFlags;

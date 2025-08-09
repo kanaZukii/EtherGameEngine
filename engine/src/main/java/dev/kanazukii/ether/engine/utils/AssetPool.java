@@ -1,12 +1,25 @@
 package dev.kanazukii.ether.engine.utils;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import dev.kanazukii.ether.engine.components.SpriteSheetDeserializer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
 import dev.kanazukii.ether.engine.components.Texture;
+import dev.kanazukii.ether.engine.components.TextureDeserializer;
 import dev.kanazukii.ether.engine.renderer.Shader;
 
 public class AssetPool {
@@ -96,10 +109,51 @@ public class AssetPool {
         File file = new File(filepath);
         String absolutePath = file.getAbsolutePath();
         if(!spritesheets.containsKey(absolutePath)){
+            System.err.println( "Error: Resource: '" + filepath + "' this sprite sheet has not been added yet.");
             assert false: "Error: Resource: '" + filepath + "' this sprite sheet has not been added yet.";
         }
 
         return spritesheets.getOrDefault(absolutePath, null); // TODO: Create reate a missing texture sprite 
+    }
+
+    public static void saveAssets(){
+        Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .registerTypeAdapter(Texture.class, new TextureDeserializer())
+                        .registerTypeAdapter(Spritesheet.class, new SpriteSheetDeserializer())
+                        .create();
+        try {
+            FileWriter writer = new FileWriter("assets.txt");
+            Collection<Spritesheet> sheets = spritesheets.values();
+            writer.write(gson.toJson(sheets));
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadAssets(){
+        spritesheets.clear();
+        Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .registerTypeAdapter(Texture.class, new TextureDeserializer())
+                        .registerTypeAdapter(Spritesheet.class, new SpriteSheetDeserializer())
+                        .create();
+
+        try {
+            String savedAssets = new String(Files.readAllBytes(Paths.get("assets.txt")));
+            if (!savedAssets.isEmpty()) {
+                Type listType = new TypeToken<List<Spritesheet>>(){}.getType();
+                List<Spritesheet> sheets = gson.fromJson(savedAssets, listType);
+
+                for (Spritesheet sheet : sheets) {
+                    String key = sheet.getTexture().getFilePath();
+                    AssetPool.addSpriteSheet(key, sheet);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

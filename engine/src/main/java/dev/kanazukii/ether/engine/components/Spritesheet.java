@@ -8,10 +8,15 @@ import org.joml.Vector2f;
 public class Spritesheet {
     
     private Texture texture;
-    private List<Sprite> sprites = new ArrayList<>();
+    private int spriteWidth, spriteHeight, numSprites, spacing;
+    private transient List<Sprite> sprites = new ArrayList<>();
 
     public Spritesheet(Texture texture, int spriteWidth, int spriteHeight, int numSprites, int spacing){
         this.texture = texture;
+        this.spriteWidth = spriteWidth;
+        this.spriteHeight = spriteHeight;
+        this.numSprites = numSprites;
+        this.spacing = spacing;
 
         int currentX = 0;
         int currentY = texture.getHeight() - spriteHeight; // Bottom corner of the first top left sprite in the sheet
@@ -48,6 +53,10 @@ public class Spritesheet {
 
     public Sprite getSprite(int index){
         return sprites.get(index);
+    }
+
+    public Texture getTexture(){
+        return texture;
     }
 
     public int getSize(){

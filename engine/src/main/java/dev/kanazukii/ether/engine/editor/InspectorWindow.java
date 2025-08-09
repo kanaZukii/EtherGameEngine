@@ -1,6 +1,5 @@
 package dev.kanazukii.ether.engine.editor;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_0;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 

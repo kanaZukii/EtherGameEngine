@@ -1,0 +1,20 @@
+[
+  {
+    "texture": {
+      "filepath": "assets/textures/tilemap.png"
+    },
+    "spriteWidth": 16,
+    "spriteHeight": 16,
+    "numSprites": 10,
+    "spacing": 0
+  },
+  {
+    "texture": {
+      "filepath": "assets/editor/gizmo_sprites.png"
+    },
+    "spriteWidth": 128,
+    "spriteHeight": 256,
+    "numSprites": 2,
+    "spacing": 0
+  }
+]

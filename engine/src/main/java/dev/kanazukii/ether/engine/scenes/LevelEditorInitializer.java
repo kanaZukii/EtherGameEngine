@@ -2,7 +2,6 @@ package dev.kanazukii.ether.engine.scenes;
 
 import org.joml.Vector2f;
 
-import dev.kanazukii.ether.engine.Camera;
 import dev.kanazukii.ether.engine.GameObject;
 import dev.kanazukii.ether.engine.Prefabs;
 import dev.kanazukii.ether.engine.components.EditorCamera;
@@ -39,20 +38,13 @@ public class LevelEditorInitializer extends SceneInitializer {
         scene.addGameObject(Editor_Components);
 
         tile_set = AssetPool.getSpriteSheet("assets/textures/tilemap.png");
+        
     }
     
     // TODO: FIX Texture loading mismatch when load order changed (Texture frist time used in update)
     @Override
     public void loadResource(Scene scene){
         AssetPool.getShader("assets/shaders/default.glsl");
-
-        AssetPool.addSpriteSheet("assets/editor/gizmo_sprites.png",
-                                new Spritesheet(AssetPool.getTexture("assets/editor/gizmo_sprites.png"),
-                                128, 256, 2, 0));
-
-        AssetPool.addSpriteSheet("assets/textures/tilemap.png", 
-                                new Spritesheet(AssetPool.getTexture("assets/textures/tilemap.png"), 
-                                    16, 16, 10, 0));
     }
 
     private void editorImGUI(){

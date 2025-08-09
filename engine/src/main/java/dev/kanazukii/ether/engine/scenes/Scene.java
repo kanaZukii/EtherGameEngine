@@ -23,6 +23,7 @@ import dev.kanazukii.ether.engine.components.TextureDeserializer;
 import dev.kanazukii.ether.engine.components.Transform;
 import dev.kanazukii.ether.engine.physcis2D.Physics2D;
 import dev.kanazukii.ether.engine.renderer.Renderer;
+import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class Scene {
     
@@ -101,6 +102,7 @@ public class Scene {
     }
 
     public void save(){
+        AssetPool.saveAssets();
         Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .registerTypeAdapter(Component.class, new ComponentDeserializer())
@@ -123,6 +125,7 @@ public class Scene {
     }
 
     public void loadScene(){
+        AssetPool.loadAssets();
         Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .registerTypeAdapter(Component.class, new ComponentDeserializer())
