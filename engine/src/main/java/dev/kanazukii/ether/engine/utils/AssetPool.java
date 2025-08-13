@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -155,5 +156,14 @@ public class AssetPool {
             e.printStackTrace();
         }
     }
+
+    public static List<Spritesheet> getLoadedSpriteSheets(){
+        return new ArrayList<>(spritesheets.values());
+    }
+
+    public static List<Texture> getLoadedTextures(){
+        return new ArrayList<>(textures.values());
+    }
+
 
 }

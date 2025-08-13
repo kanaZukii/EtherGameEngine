@@ -50,7 +50,6 @@ import org.lwjgl.opengl.GL;
 import dev.kanazukii.ether.engine.observers.EventSystem;
 import dev.kanazukii.ether.engine.observers.Observer;
 import dev.kanazukii.ether.engine.observers.events.Event;
-import dev.kanazukii.ether.engine.observers.events.EventType;
 import dev.kanazukii.ether.engine.renderer.DebugRenderer;
 import dev.kanazukii.ether.engine.renderer.FrameBuffer;
 import dev.kanazukii.ether.engine.renderer.PickingTexture;
@@ -60,6 +59,7 @@ import dev.kanazukii.ether.engine.scenes.LevelEditorInitializer;
 import dev.kanazukii.ether.engine.scenes.Scene;
 import dev.kanazukii.ether.engine.scenes.SceneInitializer;
 import dev.kanazukii.ether.engine.utils.AssetPool;
+import dev.kanazukii.ether.engine.utils.FileManager;
 
 public class Window implements Observer {
     
@@ -212,6 +212,8 @@ public class Window implements Observer {
         // For alpha blending and transparency
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+        FileManager.setUpAssetsFolder();
 
         // Binded to the screen size TODO: Make it dynamic, match it to user's screen size
         framebuffer = new FrameBuffer(1920, 1080);

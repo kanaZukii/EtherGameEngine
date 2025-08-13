@@ -8,7 +8,6 @@ import dev.kanazukii.ether.engine.components.Sprite;
 import dev.kanazukii.ether.engine.components.SpriteRenderer;
 import dev.kanazukii.ether.engine.components.Spritesheet;
 import dev.kanazukii.ether.engine.components.PlayerControls;
-import dev.kanazukii.ether.engine.utils.AssetPool;
 
 public class Prefabs {
     

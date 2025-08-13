@@ -2,9 +2,6 @@ package dev.kanazukii.ether.engine.components;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
-
-import java.io.ObjectInputFilter.Config;
 
 import org.jbox2d.common.Vec2;
 

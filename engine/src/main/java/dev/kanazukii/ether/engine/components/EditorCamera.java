@@ -8,8 +8,6 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
-import java.io.ObjectInputFilter.Config;
-
 import org.joml.Vector2f;
 
 import dev.kanazukii.ether.engine.Camera;
