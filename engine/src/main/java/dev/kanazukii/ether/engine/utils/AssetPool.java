@@ -117,6 +117,14 @@ public class AssetPool {
         return spritesheets.getOrDefault(absolutePath, null); // TODO: Create reate a missing texture sprite 
     }
 
+    public static void removeSpriteSheet(String filepath){
+        File file = new File(filepath);
+        String absolutePath = file.getAbsolutePath();
+        if(spritesheets.containsKey(absolutePath)){
+            spritesheets.remove(absolutePath);
+        }
+    }
+
     public static void saveAssets(){
         Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
